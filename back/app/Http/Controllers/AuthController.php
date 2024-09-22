@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
@@ -25,20 +26,32 @@ class AuthController extends Controller
 
         return response()->json(['user' => $user], 201);
     }
-//
-//    public function login(Request $request)
-//    {
-//        $request->validate([
-//            'email' => 'required|string|email',
-//            'password' => 'required|string',
-//        ]);
-//
-//        $user = User::where('email', $request->email)->first();
-//
-//        if (!$user || !Hash::check($request->password, $user->password)) {
-//            return response()->json(['message' => 'Unauthorized'], 401);
-//        }
-//
-//        return response()->json(['user' => $user]);
-//    }
+
+    public function authenticate(Request $request)
+    {
+        $credentials = $request->only('email', 'password');
+
+        // ユーザーをメールで検索
+        $user = User::where('email', $credentials['email'])->first();
+
+        // ユーザーが存在しない場合
+        if (!$user) {
+            return response()->json(['error' => 'User not found'], 404);
+        }
+
+        // パスワードを確認
+        if (Hash::check($credentials['password'], $user->password)) {
+            // ユーザーを手動でログイン
+            Auth::login($user);
+
+            // セッション再生成（なんかできない）
+            //  $request->session()->regenerate();
+
+            // 認証成功
+            return response()->json(['user' => $user], 201);
+        } else {
+            // パスワードが一致しない場合
+            return response()->json(['error' => 'Invalid credentials'], 401);
+        }
+    }
 }

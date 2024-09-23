@@ -160,6 +160,9 @@ class OpenAIController extends Controller
 
             $user->total_xp = $user->attack_power + $user->guard_power + $user->hit_point;
 
+            $user->last_training_time = now();
+
+
             $user->save();
 
 

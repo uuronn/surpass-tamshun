@@ -2920,6 +2920,26 @@ __metadata:
   languageName: node
   linkType: hard
 
+"framer-motion@npm:^11.5.6":
+  version: 11.5.6
+  resolution: "framer-motion@npm:11.5.6"
+  dependencies:
+    tslib: "npm:^2.4.0"
+  peerDependencies:
+    "@emotion/is-prop-valid": "*"
+    react: ^18.0.0
+    react-dom: ^18.0.0
+  peerDependenciesMeta:
+    "@emotion/is-prop-valid":
+      optional: true
+    react:
+      optional: true
+    react-dom:
+      optional: true
+  checksum: 10c0/f642224005505163fb409fa30d8a7ecf3bdead7722eddafe805062127c464a7c60b8beaff773b0d0c14ca580f492865a195e0a5832d0d6f7ddca95f97e8171b6
+  languageName: node
+  linkType: hard
+
 "front@workspace:.":
   version: 0.0.0-use.local
   resolution: "front@workspace:."
@@ -2941,6 +2961,7 @@ __metadata:
     clsx: "npm:^2.1.1"
     eslint: "npm:^8"
     eslint-config-next: "npm:14.2.13"
+    framer-motion: "npm:^11.5.6"
     lucide-react: "npm:^0.445.0"
     next: "npm:14.2.13"
     postcss: "npm:^8"

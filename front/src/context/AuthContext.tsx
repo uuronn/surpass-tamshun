@@ -31,11 +31,12 @@ export function useAuthContext() {
 }
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<UserContextType>({
+  const emptyUser: User = {
     uid: "",
     email: "",
     name: "",
-  }); //nullの時は未ログイン、undefinedの時はローディング中、userの時はログイン中
+  };
+  const [user, setUser] = useState<UserContextType>(emptyUser); //nullの時は未ログイン、undefinedの時はローディング中、userの時はログイン中
   useEffect(() => {}, []); //ログイン状態を確認する処理
   const fetchUser = async () => {}; //ユーザー情報を取得する処理
   return (

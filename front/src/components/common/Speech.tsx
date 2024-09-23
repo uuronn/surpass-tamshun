@@ -1,15 +1,12 @@
-'use client'
-
-import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 
 interface SpeechBubbleProps {
   text: string
+  isVisible: boolean
   direction?: 'left' | 'right' | 'up'
 }
 
-export default function Speech({ text, direction = 'right' }: SpeechBubbleProps) {
-  const [isVisible, setIsVisible] = useState(true)
+export default function Speech({ text, isVisible = false, direction = 'up' }: SpeechBubbleProps) {
   return (
     <div
       className={`flex ${

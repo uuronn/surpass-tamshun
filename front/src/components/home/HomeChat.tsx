@@ -7,6 +7,9 @@ export default function HomeChat() {
   const [message, setMessage] = useState('')
   const [characterMessage, setCharacterMessage] = useState('ようこそ、冒険者よ！')
 
+  const text =
+    'ほげほげほげほげほげほげほげほげほげほげほげほげほげほげほげほげほげほげほげほげほげほげほげほげほげほげ'
+
   useEffect(() => {
     const interval = setInterval(() => {
       setCharacterMessage((prevMessage) =>
@@ -56,8 +59,8 @@ export default function HomeChat() {
           }
         `}</style>
       </div>
-      <div className="flex items-center justify-center" style={{ height: '20%' }}>
-        <Speech text="ほげほげほげほげほげほげほげほげほげほげほげほげほげほげほげほげほげほげほげほげほげほげほげほげほげほげ" />
+      <div className="flex items-end justify-center" style={{ height: '20%' }}>
+        <Speech text={text} isVisible={!!text} />
       </div>
       <div className="mt-8 w-full max-w-md">
         <Input

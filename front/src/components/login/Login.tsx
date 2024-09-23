@@ -1,18 +1,18 @@
-"use client";
+'use client'
 
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Sun, Flame, Zap, UserPlus, LogIn } from "lucide-react";
+import { useState } from 'react'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Sun, Flame, Zap, UserPlus, LogIn } from 'lucide-react'
 
 export default function Login() {
-  const [isLoading, setIsLoading] = useState(false);
-  const [isLogin, setIsLogin] = useState(true);
+  const [isLoading, setIsLoading] = useState(false)
+  const [isLogin, setIsLogin] = useState(true)
 
   const toggleForm = () => {
-    setIsLogin(!isLogin);
-  };
+    setIsLogin(!isLogin)
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-yellow-400 via-red-500 to-pink-500">
@@ -36,30 +36,24 @@ export default function Login() {
         </Button>
       </div>
     </div>
-  );
+  )
 }
 
 function SignIn(isLoading: boolean) {
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+    e.preventDefault()
     // ログイン処理をここに追加
-  };
+  }
 
   return (
     <>
       <h1 className="text-3xl font-bold text-center mb-6 text-red-600 flex items-center justify-center">
-        <Sun
-          className="inline-block text-yellow-500 mr-2 animate-spin-slow"
-          size={36}
-        />
+        <Sun className="inline-block text-yellow-500 mr-2 animate-spin-slow" size={36} />
         ログイン！
       </h1>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="space-y-2">
-          <Label
-            htmlFor="email"
-            className="text-lg font-bold text-red-500 uppercase"
-          >
+          <Label htmlFor="email" className="text-lg font-bold text-red-500 uppercase">
             メールアドレス
           </Label>
           <Input
@@ -70,10 +64,7 @@ function SignIn(isLoading: boolean) {
           />
         </div>
         <div className="space-y-2">
-          <Label
-            htmlFor="password"
-            className="text-lg font-bold text-red-500 uppercase"
-          >
+          <Label htmlFor="password" className="text-lg font-bold text-red-500 uppercase">
             パスワード
           </Label>
           <Input
@@ -93,34 +84,28 @@ function SignIn(isLoading: boolean) {
           ) : (
             <Zap className="mr-2 h-5 w-5" />
           )}
-          {isLoading ? "ログイン中..." : "ログイン！"}
+          {isLoading ? 'ログイン中...' : 'ログイン！'}
         </Button>
       </form>
     </>
-  );
+  )
 }
 
 function SignUp(isLoading: boolean) {
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+    e.preventDefault()
     // 新規登録処理をここに追加
-  };
+  }
 
   return (
     <>
       <h1 className="text-3xl font-bold text-center mb-6 text-red-600 flex items-center justify-center">
-        <Sun
-          className="inline-block text-yellow-500 mr-2 animate-spin-slow"
-          size={36}
-        />
+        <Sun className="inline-block text-yellow-500 mr-2 animate-spin-slow" size={36} />
         新規登録！
       </h1>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="space-y-2">
-          <Label
-            htmlFor="username"
-            className="text-lg font-bold text-red-500 uppercase"
-          >
+          <Label htmlFor="username" className="text-lg font-bold text-red-500 uppercase">
             ユーザー名
           </Label>
           <Input
@@ -130,10 +115,7 @@ function SignUp(isLoading: boolean) {
           />
         </div>
         <div className="space-y-2">
-          <Label
-            htmlFor="email"
-            className="text-lg font-bold text-red-500 uppercase"
-          >
+          <Label htmlFor="email" className="text-lg font-bold text-red-500 uppercase">
             メールアドレス
           </Label>
           <Input
@@ -144,10 +126,7 @@ function SignUp(isLoading: boolean) {
           />
         </div>
         <div className="space-y-2">
-          <Label
-            htmlFor="password"
-            className="text-lg font-bold text-red-500 uppercase"
-          >
+          <Label htmlFor="password" className="text-lg font-bold text-red-500 uppercase">
             パスワード
           </Label>
           <Input
@@ -167,9 +146,9 @@ function SignUp(isLoading: boolean) {
           ) : (
             <Zap className="mr-2 h-5 w-5" />
           )}
-          {isLoading ? "登録中..." : "新規登録！"}
+          {isLoading ? '登録中...' : '新規登録！'}
         </Button>
       </form>
     </>
-  );
+  )
 }

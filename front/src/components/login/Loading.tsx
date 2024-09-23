@@ -1,17 +1,17 @@
-"use client";
+'use client'
 
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react'
 
 export default function Loading({ message }: { message: string }) {
-  const [rotation, setRotation] = useState(0);
+  const [rotation, setRotation] = useState(0)
 
   useEffect(() => {
     const intervalId = setInterval(() => {
-      setRotation((prevRotation) => (prevRotation + 3) % 3600);
-    }, 16); // 約60FPSで更新
+      setRotation((prevRotation) => (prevRotation + 3) % 3600)
+    }, 16) // 約60FPSで更新
 
-    return () => clearInterval(intervalId);
-  }, []);
+    return () => clearInterval(intervalId)
+  }, [])
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-yellow-400 via-red-500 to-pink-500">
@@ -21,7 +21,7 @@ export default function Loading({ message }: { message: string }) {
         className="w-48 h-48 rounded-full overflow-hidden shadow-lg"
         style={{
           transform: `rotate(${rotation}deg)`,
-          transition: "transform 0.016s linear",
+          transition: 'transform 0.016s linear',
         }}
       >
         <img
@@ -30,5 +30,5 @@ export default function Loading({ message }: { message: string }) {
         />
       </div>
     </div>
-  );
+  )
 }

@@ -10,9 +10,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body style={{ height: "100vh", width: "100vw" }}>
-        <NextAuthProvider>
-          <AuthProvider>{children}</AuthProvider>
-        </NextAuthProvider>
+        {/* <NextAuthProvider> */}
+        <AuthProvider>{children}</AuthProvider>
+        {/* </NextAuthProvider> */}
       </body>
     </html>
   );

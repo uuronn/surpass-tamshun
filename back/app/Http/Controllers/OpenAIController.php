@@ -169,7 +169,13 @@ class OpenAIController extends Controller
 
                     return response()->json([
                 'success' => true,
-                'result' => $scores,
+                'result' => [
+                    'attackPower' => $user->attack_power,
+                    'guardPower' => $user->guard_power,
+                    'hitPoint' => $user->hit_point,
+                    'totalXp' => $user->total_xp,
+                    'lastTrainingTime' => $user->last_training_time
+                ],
             ]);
                 }
             }

@@ -154,13 +154,17 @@ class OpenAIController extends Controller
 //            var_dump($hotWords);
             $hotWords[] = $prompt;
             $user->hot_words = $hotWords;
-//            $user->total_xp += 3;
+            $user->attack_power += $scores['attack_power'];
+            $user->guard_power += $scores['guard_power'];
+            $user->hit_point += $scores['hit_point'];
 
-
+            $user->total_xp = $user->attack_power + $user->guard_power + $user->hit_point;
 
             $user->save();
 
-            return response()->json([
+
+
+                    return response()->json([
                 'success' => true,
                 'result' => $scores,
             ]);

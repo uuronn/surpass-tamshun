@@ -1,34 +1,29 @@
-"use client";
+'use client'
 
-import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useState, useEffect } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 
 interface SpeechBubbleProps {
-  text: string;
-  direction?: "left" | "right" | "up";
+  text: string
+  direction?: 'left' | 'right' | 'up'
 }
 
-export default function Speech({
-  text,
-  direction = "right",
-}: SpeechBubbleProps) {
-  const [isVisible, setIsVisible] = useState(true);
+export default function Speech({ text, direction = 'right' }: SpeechBubbleProps) {
+  const [isVisible, setIsVisible] = useState(true)
   return (
     <div
       className={`flex ${
-        direction === "right"
-          ? "justify-end"
-          : direction === "up"
-          ? "justify-center"
-          : "justify-start" // "up" の場合のスタイルを追加
+        direction === 'right'
+          ? 'justify-end'
+          : direction === 'up'
+            ? 'justify-center'
+            : 'justify-start' // "up" の場合のスタイルを追加
       }`}
     >
       <AnimatePresence>
         {isVisible && (
-          <motion.div
-            className={`relative max-w-xs md:max-w-sm bg-white p-4 rounded-3xl`}
-          >
-            <p style={{ wordWrap: "break-word" }}>{text}</p>
+          <motion.div className={`relative max-w-xs md:max-w-sm bg-white p-4 rounded-3xl`}>
+            <p style={{ wordWrap: 'break-word' }}>{text}</p>
             {/* <div
               className={`absolute w-4 h-4 bg-white transform rotate-45 ${
                 direction === "right"
@@ -42,5 +37,5 @@ export default function Speech({
         )}
       </AnimatePresence>
     </div>
-  );
+  )
 }

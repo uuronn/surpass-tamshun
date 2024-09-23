@@ -1,40 +1,39 @@
-import { useState, useEffect } from "react";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import Speech from "../common/Speech";
+import { useState, useEffect } from 'react'
+import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
+import Speech from '../common/Speech'
 
 export default function HomeChat() {
-  const [message, setMessage] = useState("");
-  const [characterMessage, setCharacterMessage] =
-    useState("ようこそ、冒険者よ！");
+  const [message, setMessage] = useState('')
+  const [characterMessage, setCharacterMessage] = useState('ようこそ、冒険者よ！')
 
   useEffect(() => {
     const interval = setInterval(() => {
       setCharacterMessage((prevMessage) =>
-        prevMessage === "ようこそ、冒険者よ！"
-          ? "何か困ったことはありませんか？"
-          : "ようこそ、冒険者よ！"
-      );
-    }, 5000);
+        prevMessage === 'ようこそ、冒険者よ！'
+          ? '何か困ったことはありませんか？'
+          : 'ようこそ、冒険者よ！',
+      )
+    }, 5000)
 
-    return () => clearInterval(interval);
-  }, []);
+    return () => clearInterval(interval)
+  }, [])
 
   return (
     <div
       style={{
-        height: "100%",
-        width: "100%",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
+        height: '100%',
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
       }}
     >
       <div
         style={{
-          width: "55%",
-          minWidth: "350px",
+          width: '55%',
+          minWidth: '350px',
         }}
       >
         <img
@@ -57,10 +56,7 @@ export default function HomeChat() {
           }
         `}</style>
       </div>
-      <div
-        className="flex items-center justify-center"
-        style={{ height: "20%" }}
-      >
+      <div className="flex items-center justify-center" style={{ height: '20%' }}>
         <Speech text="ほげほげほげほげほげほげほげほげほげほげほげほげほげほげほげほげほげほげほげほげほげほげほげほげほげほげ" />
       </div>
       <div className="mt-8 w-full max-w-md">
@@ -73,13 +69,13 @@ export default function HomeChat() {
         <Button
           className="mt-4 w-full bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-bold py-2 px-4 rounded-full transition duration-300 ease-in-out transform hover:scale-105"
           onClick={() => {
-            setCharacterMessage(message);
-            setMessage("");
+            setCharacterMessage(message)
+            setMessage('')
           }}
         >
           送信
         </Button>
       </div>
     </div>
-  );
+  )
 }

@@ -78,21 +78,12 @@ class OpenAIController extends Controller
 
         $user = User::where('id', $request['user_id'])->first();
 
-        var_dump($user->level);
+//        var_dump($user->level);
 
         // ユーザーが存在しない場合
         if (!$user) {
             return response()->json(['error' => 'User not found'], 404);
         }
-
-        // hot_words に prompt を追加
-        // hot_words が null の場合は空配列として扱う
-        $hotWords = $user->hot_words ?? [];
-
-        var_dump($hotWords);
-        $hotWords[] = $prompt;
-        $user->hot_words = $hotWords;
-        $user->save();
 
         $client = new Client();
 
@@ -107,10 +98,25 @@ class OpenAIController extends Controller
                     'messages' => [
                         [
                             'role' => 'system',
-                            'content' => '僕から熱い言葉やエネルギッシュな言葉があったら、それを100点満点で点数を採点して、"数値のみ"を出力して欲しいです。
-                            採点基準は、その言葉がどれだけ相手に元気を与えるか、どれだけ相手を励ますか、どれだけ相手を前向きにさせるか、です。
-                            厳しく判定してください。
-                            また、判定できない場合は最低点数で出力してください。'
+                            'content' => '僕から熱い言葉やエネルギッシュな言葉があったら、それを10点満点で以下の項目ごとに採点して、英語の変数名を使用したJSON形式で数値のみを出力して欲しいです。
+
+採点基準は以下の通りです：
+1. 元気を与える度合い
+2. 攻撃力（言葉の強さや影響力）
+3. 防御力（ネガティブな影響から守る力）
+4. 体力（言葉の持続力や安定性）
+
+各項目について厳しく判定してください。判定できない場合は最低点数（0点）を出力してください。
+
+出力形式は以下のようにしてください（英語の変数名を使用）：
+
+```json
+{
+  "heat_power": 数値,
+  "attack_power": 数値,
+  "guard_power": 数値,
+  "hit_point": 数値
+}'
                         ],
                         [
                             'role' => 'user',
@@ -125,12 +131,42 @@ class OpenAIController extends Controller
 
             $generatedText = $body['choices'][0]['message']["content"] ?? '0';
 
-            $resultScore = preg_replace('/\D/', '', $generatedText);
+
+
+
+//            $data = json_decode($generatedText, true);
+
+            // JSON部分を抽出
+            if (preg_match('/\{.*\}/s', $generatedText, $matches)) {
+                $jsonString = $matches[0];
+                $scores = json_decode($jsonString, true);
+
+                if (json_last_error() === JSON_ERROR_NONE) {
+
+
+//            var_dump($generatedText->json());
+//            $resultScore = preg_replace('/\D/', '', $generatedText);
+
+            // hot_words に prompt を追加
+            // hot_words が null の場合は空配列として扱う
+            $hotWords = $user->hot_words ?? [];
+
+//            var_dump($hotWords);
+            $hotWords[] = $prompt;
+            $user->hot_words = $hotWords;
+//            $user->total_xp += 3;
+
+
+
+            $user->save();
 
             return response()->json([
                 'success' => true,
-                'xp' => $resultScore,
+                'result' => $scores,
             ]);
+                }
+            }
+
 
         } catch (Exception $e) {
             return response()->json([

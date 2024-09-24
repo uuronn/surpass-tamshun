@@ -76,4 +76,22 @@ class RoomController extends Controller
 
         return response()->json(['room' => $room], 201);
     }
+
+    public function getRoom(Request $request)
+    {
+        $room = Room::find($request->room_id);
+
+//        var_dump("test");
+//
+        if (!$room->host_user_id) {
+            return response()->json(['error' => 'ホストがいません'] );
+        }
+////
+//        if (!$room->join_user_id) {
+//            return response()->json(['error' => '既に参加ユーザーがいます'] );
+//        }
+
+        return response()->json(['room' => $room,'status' => 201]);
+    }
+
 }

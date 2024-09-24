@@ -26,7 +26,7 @@ return new class extends Migration
             $table->integer('join_user_hit_point')->nullable();
             $table->json('join_user_skills')->nullable();
 //
-//            $table->uuid('is_battle_Finish');
+            $table->boolean('is_battle_finish')->default(false);
             $table->timestamps();
         });
     }

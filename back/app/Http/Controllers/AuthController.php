@@ -52,7 +52,19 @@ class AuthController extends Controller
             Auth::login($user);
 
             // セッション再生成（なんかできない）
-            //  $request->session()->regenerate();
+//              $request->session()->regenerate();
+
+            // セッション再生成
+//            $request->session()->regenerate();
+
+            // セッションIDを取得
+            $sessionId = session()->getId();
+
+            // 認証成功
+            return response()->json([
+                'user' => $user,
+                'session_id' => $sessionId // デバッグ用に追加
+            ], 201);
 
             // 認証成功
             return response()->json(['user' => $user], 201);

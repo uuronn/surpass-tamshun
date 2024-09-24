@@ -1,3 +1,5 @@
+'use client'
+
 import { motion, AnimatePresence } from 'framer-motion'
 
 interface SpeechBubbleProps {
@@ -20,13 +22,52 @@ export default function Speech({
           ? 'justify-end'
           : direction === 'up'
             ? 'justify-center'
-            : 'justify-start' // "up" の場合のスタイルを追加
+            : 'justify-start'
       }`}
     >
       <AnimatePresence>
         {isVisible && (
-          <motion.div className={`relative max-w-xs md:max-w-sm bg-white p-4 rounded-3xl`}>
-            <p style={{ wordWrap: 'break-word' }}>{text}</p>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3 }}
+            className={`relative max-w-xs md:max-w-sm bg-white p-4 rounded-3xl ${
+              direction === 'right'
+                ? 'rounded-br-none'
+                : direction === 'left'
+                  ? 'rounded-bl-none'
+                  : ''
+            }`}
+          >
+            {loading ? (
+              <div className="flex justify-center items-center h-6" aria-label="読み込み中">
+                <motion.span
+                  className="w-2 h-2 bg-gray-400 rounded-full mr-1"
+                  animate={{ scale: [1, 1.5, 1] }}
+                  transition={{ duration: 0.6, repeat: Infinity }}
+                />
+                <motion.span
+                  className="w-2 h-2 bg-gray-400 rounded-full mr-1"
+                  animate={{ scale: [1, 1.5, 1] }}
+                  transition={{ duration: 0.6, repeat: Infinity, delay: 0.2 }}
+                />
+                <motion.span
+                  className="w-2 h-2 bg-gray-400 rounded-full"
+                  animate={{ scale: [1, 1.5, 1] }}
+                  transition={{ duration: 0.6, repeat: Infinity, delay: 0.4 }}
+                />
+              </div>
+            ) : (
+              <p className="break-words">{text}</p>
+            )}
+            {(direction === 'left' || direction === 'right') && (
+              <div
+                className={`absolute w-4 h-4 bg-white transform rotate-45 ${
+                  direction === 'right' ? '-right-2 bottom-3' : '-left-2 bottom-3'
+                }`}
+              />
+            )}
           </motion.div>
         )}
       </AnimatePresence>

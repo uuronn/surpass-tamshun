@@ -2,24 +2,17 @@ import { useState, useEffect } from 'react'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import Speech from './Speech'
+import Image from 'next/image'
 
 type chatProps = {
   message: string
   setMessage: (message: string) => void
   reply: string
-  setReply: (message: string) => void
   handleSubmit: () => void
   loading: boolean
 }
 
-export default function Chat({
-  message,
-  setMessage,
-  reply,
-  setReply,
-  handleSubmit,
-  loading,
-}: chatProps) {
+export default function Chat({ message, setMessage, reply, handleSubmit, loading }: chatProps) {
   return (
     <div
       style={{
@@ -33,14 +26,21 @@ export default function Chat({
     >
       <div
         style={{
+          position: 'relative',
           width: '55%',
           minWidth: '350px',
+          minHeight: '50%',
+          height: '500px',
         }}
       >
-        <img
-          src="https://www.shuzo.co.jp/wp/wp-content/themes/shuzo2017/img/message/img_shuzo01.png"
-          alt="Shuzo Matsuoka"
-          className="sway-animation"
+        <Image
+          src="/home_syuzo.png"
+          alt="ホームの画像"
+          fill
+          style={{
+            objectFit: 'contain',
+            animation: 'sway 2s ease-in-out infinite', // ここでアニメーションを直接適用
+          }}
         />
         <style jsx>{`
           @keyframes sway {
@@ -51,9 +51,6 @@ export default function Chat({
             50% {
               transform: translateY(-10px);
             }
-          }
-          .sway-animation {
-            animation: sway 2s ease-in-out infinite;
           }
         `}</style>
       </div>

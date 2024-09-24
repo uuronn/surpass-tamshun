@@ -1,4 +1,4 @@
-import { NextAuthProvider } from '@/lib/NextAuthProvider'
+// import { NextAuthProvider } from '@/lib/NextAuthProvider'
 import './globals.css'
 import { AuthProvider } from '@/context/AuthContext'
 

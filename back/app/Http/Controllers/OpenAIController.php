@@ -88,7 +88,7 @@ class OpenAIController extends Controller
     {
         $prompt = $request->input('prompt');
 
-        $user = User::where('id', $request['user_id'])->first();
+        $user = User::where('id', $request['userId'])->first();
 
 //        var_dump($user->level);
 

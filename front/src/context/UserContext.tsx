@@ -8,7 +8,7 @@ import { createContext, useState, useContext, useEffect, ReactNode } from 'react
 
 const UserContext = createContext<{
   user: User | null | undefined
-  fetchUser:(userId: string) => Promise<User>
+  fetchUser: (userId: string) => Promise<User>
   setUser: React.Dispatch<React.SetStateAction<User | null | undefined>>
 }>({
   user: undefined,
@@ -33,9 +33,16 @@ export function UserProvider({ children }: { children: ReactNode }) {
       },
     })
     const data = await res.json()
+    console.log(data)
     const name = data.user.name
     const email = data.user.email
-    return { userId, name, email } as User
+    const attack = data.user.attack
+    const guard = data.user.guard
+    const hp = data.user.hp
+    const hotWords = data.user.hotWords
+    const lastTraining = new Date(data.user.lastTraining)
+    const xp = data.user.xp
+    return { userId, name, email, attack, guard, hp, hotWords, lastTraining, xp } as User
   }
 
   useEffect(() => {
@@ -44,7 +51,7 @@ export function UserProvider({ children }: { children: ReactNode }) {
       const currentPage =
         window.location.pathname.split('/')[window.location.pathname.split('/').length - 1]
       const localUserId = localStorage.getItem('userId')
-      if (localUserId) {
+      if (localUserId !== null && localUserId !== undefined) {
         try {
           const userData = await fetchUser(localUserId) // fetchUserをawaitで待つ
           setUser(userData) // fetchしたユーザーデータをセット

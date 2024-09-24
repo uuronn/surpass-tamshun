@@ -28,7 +28,7 @@ export default function Home() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ userId: user?.userId, prompt: message }),
+        body: JSON.stringify({ user_id: user?.userId, prompt: message }),
       })
       const data = await res.json()
       console.log(data)

@@ -43,7 +43,7 @@ export default function Login() {
 
 function SignIn(isLoading: boolean) {
   const router = useRouter()
-  const { setUser } = useUserContext()
+  const { setUser, fetchUser } = useUserContext()
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     // ログイン処理をここに追加
@@ -67,7 +67,8 @@ function SignIn(isLoading: boolean) {
     const userId = data.user.id
     router.push(`/${userId}`)
     localStorage.setItem('userId', userId)
-    setUser({ userId: userId, name: '', email: '' })
+    const userdata = await fetchUser(userId)
+    setUser(userdata)
   }
 
   return (

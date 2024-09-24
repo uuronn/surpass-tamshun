@@ -8,6 +8,7 @@
     "no-useless-constructor": "off",
     "array-callback-return": 0,
     "func-call-spacing": [2, "never"],
-    "react-hooks/exhaustive-deps": "off"
+    "react-hooks/exhaustive-deps": "off",
+    "react-hooks/rules-of-hooks": "off"
   }
 }

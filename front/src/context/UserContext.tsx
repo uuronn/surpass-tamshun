@@ -8,7 +8,7 @@ import { createContext, useState, useContext, useEffect, ReactNode } from 'react
 
 const UserContext = createContext<{
   user: User | null | undefined
-  fetchUser: (userId: string) => Promise<User>
+  fetchUser:(userId: string) => Promise<User>
   setUser: React.Dispatch<React.SetStateAction<User | null | undefined>>
 }>({
   user: undefined,
@@ -33,7 +33,6 @@ export function UserProvider({ children }: { children: ReactNode }) {
       },
     })
     const data = await res.json()
-    console.log(data)
     const name = data.user.name
     const email = data.user.email
     const attack = data.user.attack

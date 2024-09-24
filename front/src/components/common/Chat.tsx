@@ -3,6 +3,7 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import Speech from './Speech'
 import Image from 'next/image'
+import FloatingImg from './FloatingImg'
 
 type chatProps = {
   message: string
@@ -33,26 +34,7 @@ export default function Chat({ message, setMessage, reply, handleSubmit, loading
           height: '500px',
         }}
       >
-        <Image
-          src="/home_syuzo.png"
-          alt="ホームの画像"
-          fill
-          style={{
-            objectFit: 'contain',
-            animation: 'sway 2s ease-in-out infinite', // ここでアニメーションを直接適用
-          }}
-        />
-        <style jsx>{`
-          @keyframes sway {
-            0%,
-            100% {
-              transform: translateY(0);
-            }
-            50% {
-              transform: translateY(-10px);
-            }
-          }
-        `}</style>
+        <FloatingImg src="/home_syuzo.png" />
       </div>
       <div className="flex items-center justify-center" style={{ height: '20%' }}>
         <Speech text={reply} isVisible={!!reply} loading={loading} />

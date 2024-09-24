@@ -9,8 +9,8 @@ class UserController extends Controller
     public function currentUser($userId)
     {
         $user = User::find($userId);
-        var_dump($user);
 
-        return response()->json(['status' => 200]);
+
+        return response()->json(['user' => $user, 'status' => 200]);
     }
 }

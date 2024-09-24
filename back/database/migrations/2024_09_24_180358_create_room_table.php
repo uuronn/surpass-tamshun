@@ -20,11 +20,11 @@ return new class extends Migration
             $table->integer('host_user_hit_point');
             $table->json('host_user_skills')->nullable();
 
-//            $table->uuid('join_user_id')->nullable();
-//            $table->integer('join_user_attack_power')->nullable();
-//            $table->integer('join_user_guard_power')->nullable();
-//            $table->integer('join_user_hit_point')->nullable();
-//            $table->json('join_user_skills')->nullable();
+            $table->uuid('join_user_id')->nullable();
+            $table->integer('join_user_attack_power')->nullable();
+            $table->integer('join_user_guard_power')->nullable();
+            $table->integer('join_user_hit_point')->nullable();
+            $table->json('join_user_skills')->nullable();
 //
 //            $table->uuid('is_battle_Finish');
             $table->timestamps();

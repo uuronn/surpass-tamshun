@@ -10,12 +10,15 @@ export default function Home() {
   const [loading, setLoading] = useState(false)
 
   const handleSubmit = async () => {
+    if (message === '') {
+      return
+    }
     setLoading(true)
+    setMessage('')
     try {
       console.log(message)
       await new Promise((resolve) => setTimeout(resolve, 2000)) // 2秒待つ
     } finally {
-      setMessage('')
       setLoading(false)
     }
   }
@@ -40,7 +43,6 @@ export default function Home() {
           message={message}
           setMessage={setMessage}
           reply={reply}
-          setReply={setReply}
           handleSubmit={handleSubmit}
           loading={loading}
         />

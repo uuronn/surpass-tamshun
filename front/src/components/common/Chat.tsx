@@ -7,19 +7,11 @@ type chatProps = {
   message: string
   setMessage: (message: string) => void
   reply: string
-  setReply: (message: string) => void
   handleSubmit: () => void
   loading: boolean
 }
 
-export default function Chat({
-  message,
-  setMessage,
-  reply,
-  setReply,
-  handleSubmit,
-  loading,
-}: chatProps) {
+export default function Chat({ message, setMessage, reply, handleSubmit, loading }: chatProps) {
   return (
     <div
       style={{

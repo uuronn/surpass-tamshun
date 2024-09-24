@@ -108,5 +108,5 @@ export default function BattleScreen() {
         }
       `}</style>
     </div>
-  );
+  )
 }

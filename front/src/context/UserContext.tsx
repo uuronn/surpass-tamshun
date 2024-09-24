@@ -48,7 +48,8 @@ export function UserProvider({ children }: { children: ReactNode }) {
 
   return (
     <UserContext.Provider value={{ user, fetchUser, setUser }}>
-      {user ? children : user === null ? <Login /> : <Loading message="ユーザー情報を取得中..." />}
+      {/* {user ? children : user === null ? <Login /> : <Loading message="ユーザー情報を取得中..." />} */}
+      {children}
     </UserContext.Provider>
   )
 }

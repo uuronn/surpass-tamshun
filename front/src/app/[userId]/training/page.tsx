@@ -9,9 +9,9 @@ import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
 export default function Home() {
-  const [message, setMessage] = useState('')
-  const [reply, setReply] = useState('ほげほげ')
-  const [loading, setLoading] = useState(false)
+  const [message, setMessage] = useState<string>('')
+  const [reply, setReply] = useState<string>('')
+  const [loading, setLoading] = useState<boolean>(false)
 
   const { user } = useUserContext()
   const router = useRouter()
@@ -23,7 +23,15 @@ export default function Home() {
     setLoading(true)
     setMessage('')
     try {
-      await new Promise((resolve) => setTimeout(resolve, 2000)) // 2秒待つ
+      const res = await fetch('http://localhost/api/openai/training', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userId: user?.userId, prompt: message }),
+      })
+      const data = await res.json()
+      console.log(data)
     } finally {
       setLoading(false)
     }

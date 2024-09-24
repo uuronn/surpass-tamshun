@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ActionController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ConversationController;
 use App\Http\Controllers\OpenAIController;
@@ -21,6 +22,8 @@ Route::post('/room', [RoomController::class, 'createRoom'])->withoutMiddleware([
 Route::put('/joinRoom', [RoomController::class, 'joinRoom'])->withoutMiddleware([VerifyCsrfToken::class]);
 
 Route::post('/getRoom', [RoomController::class, 'getRoom'])->withoutMiddleware([VerifyCsrfToken::class]);
+
+Route::post('/action', [ActionController::class, 'attack'])->withoutMiddleware([VerifyCsrfToken::class]);
 
 Route::get('/users/{userId}', [UserController::class, 'currentUser'])->withoutMiddleware([VerifyCsrfToken::class]);
 

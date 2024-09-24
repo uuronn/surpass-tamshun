@@ -119,7 +119,7 @@ function SignIn(isLoading: boolean) {
 }
 
 function SignUp(isLoading: boolean) {
-  const { setUser } = useUserContext()
+  const { setUser, fetchUser } = useUserContext()
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
@@ -145,8 +145,9 @@ function SignUp(isLoading: boolean) {
     const data = await res.json() // レスポンスのボディをテキストとして読み取る
     const userId = data.user.id
 
-    localStorage.setItem('userId', JSON.stringify(userId))
-    setUser(userId)
+    localStorage.setItem('userId', userId)
+    const userdata = await fetchUser(userId)
+    setUser(userdata)
   }
 
   return (

@@ -2,32 +2,25 @@
 
 import Loading from '@/components/login/Loading'
 import Login from '@/components/login/Login'
+import { User } from '@/type/user'
 import { createContext, useState, useContext, useEffect, ReactNode } from 'react'
 
-export type User = {
-  userId: string
-  email: string
-  name: string
-}
-
-export type UserContextType = User
-
-const AuthContext = createContext<{
-  user: UserContextType | null | undefined
+const UserContext = createContext<{
+  user: User | null | undefined
   fetchUser:() => void
-  setUser: React.Dispatch<React.SetStateAction<UserContextType | null | undefined>>
+  setUser: React.Dispatch<React.SetStateAction<User | null | undefined>>
 }>({
   user: undefined,
   fetchUser: () => {},
   setUser: () => {},
 })
 
-export function useAuthContext() {
-  return useContext(AuthContext)
+export function useUserContext() {
+  return useContext(UserContext)
 }
 
-export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<UserContextType | null | undefined>(undefined) //nullの時は未ログイン、undefinedの時はローディング中、userの時はログイン中
+export function UserProvider({ children }: { children: ReactNode }) {
+  const [user, setUser] = useState<User | null | undefined>(undefined) //nullの時は未ログイン、undefinedの時はローディング中、userの時はログイン中
 
   useEffect(() => {
     setUser(undefined)
@@ -54,8 +47,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   } //ユーザー情報を取得する処理
 
   return (
-    <AuthContext.Provider value={{ user, fetchUser, setUser }}>
+    <UserContext.Provider value={{ user, fetchUser, setUser }}>
       {user ? children : user === null ? <Login /> : <Loading message="ユーザー情報を取得中..." />}
-    </AuthContext.Provider>
+    </UserContext.Provider>
   )
 }

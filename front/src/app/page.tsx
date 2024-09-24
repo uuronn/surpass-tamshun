@@ -2,7 +2,7 @@
 
 import Chat from '@/components/common/Chat'
 import { Button } from '@/components/ui/button'
-import { useAuthContext } from '@/context/AuthContext'
+import { useUserContext } from '@/context/UserContext'
 import { useState } from 'react'
 
 export default function Home() {
@@ -10,7 +10,7 @@ export default function Home() {
   const [reply, setReply] = useState('ほげほげ')
   const [loading, setLoading] = useState(false)
 
-  const { setUser } = useAuthContext()
+  const { setUser } = useUserContext()
 
   const logout = () => {
     setUser(null)

@@ -23,12 +23,15 @@ export default function Loading({ message }: { message: string }) {
         style={{
           transform: `rotate(${rotation}deg)`,
           transition: 'transform 0.016s linear',
+          boxShadow: '0 0 20px 10px rgba(255, 255, 255, 0.7)', // エフェクトの大きさを増やす
         }}
       >
         <Image
-          src="https://up.gc-img.net/post_img_web/2017/07/fJZOQPupjzePYuW_22841.jpeg"
+          src="/syuzo_sun.jpg"
           alt=""
           className="w-full h-full object-cover"
+          width={500}
+          height={500}
         />
       </div>
     </div>

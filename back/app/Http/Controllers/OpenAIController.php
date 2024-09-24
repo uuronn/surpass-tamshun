@@ -22,6 +22,10 @@ class OpenAIController extends Controller
 
         // $hotWordsJson = json_encode( $user->hot_words, JSON_UNESCAPED_UNICODE);
 
+        $hotWordsString = (is_array($user->hot_words) && !empty($user->hot_words))
+            ? implode(', ', $user->hot_words)
+            : '';
+
         $prompt = $request->input('prompt');
 
         $client = new Client();

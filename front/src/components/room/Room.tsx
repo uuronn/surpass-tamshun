@@ -1,14 +1,40 @@
-import React from 'react';
-import Image from 'next/image';
+import React from 'react'
+import Image from 'next/image'
 
 const characters = [
-  { id: 1, name: '松岡修造', level: 100, comment: 'あきらめるなーーー！！', imageUrl: '/shuzohonki.png' },
-  { id: 2, name: '松岡修造', level: 100, comment: 'あきらめるなーーー！！', imageUrl: '/shuzohonki.png' },
-  { id: 3, name: '松岡修造', level: 100, comment: 'あきらめるなーーー！！', imageUrl: '/shuzohonki.png' },
+  {
+    id: 1,
+    name: '松岡修造',
+    level: 100,
+    comment: 'あきらめるなーーー！！',
+    imageUrl: '/shuzohonki.png',
+  },
+  {
+    id: 2,
+    name: '松岡修造',
+    level: 100,
+    comment: 'あきらめるなーーー！！',
+    imageUrl: '/shuzohonki.png',
+  },
+  {
+    id: 3,
+    name: '松岡修造',
+    level: 100,
+    comment: 'あきらめるなーーー！！',
+    imageUrl: '/shuzohonki.png',
+  },
   // 他のキャラクターを追加
-];
+]
 
-const StatusBar = ({ label, value, bgColor }: { label: string; value: number; bgColor: string }) => {
+const StatusBar = ({
+  label,
+  value,
+  bgColor,
+}: {
+  label: string
+  value: number
+  bgColor: string
+}) => {
   return (
     <div className="statusBar" style={{ backgroundColor: bgColor }}>
       <span>{label}</span>
@@ -29,8 +55,8 @@ const StatusBar = ({ label, value, bgColor }: { label: string; value: number; bg
         }
       `}</style>
     </div>
-  );
-};
+  )
+}
 
 export default function Room() {
   return (
@@ -64,7 +90,7 @@ export default function Room() {
         }
       `}</style>
     </div>
-  );
+  )
 }
 
 const RoomCreationButton = () => {
@@ -82,14 +108,20 @@ const RoomCreationButton = () => {
         }
       `}</style>
     </button>
-  );
-};
+  )
+}
 
-const CharacterCard = ({ character }: { character: typeof characters[0] }) => {
+const CharacterCard = ({ character }: { character: (typeof characters)[0] }) => {
   return (
     <div className="card">
       <LevelBadge level={character.level} />
-      <Image src={character.imageUrl} alt={character.name} width={100} height={100} className="avatar" />
+      <Image
+        src={character.imageUrl}
+        alt={character.name}
+        width={100}
+        height={100}
+        className="avatar"
+      />
       <h3>{character.name}</h3>
       <p>{character.comment}</p>
       <div style={{ padding: '20px 0' }}>
@@ -123,8 +155,8 @@ const CharacterCard = ({ character }: { character: typeof characters[0] }) => {
         }
       `}</style>
     </div>
-  );
-};
+  )
+}
 
 const LevelBadge = ({ level }: { level: number }) => {
   return (
@@ -144,5 +176,5 @@ const LevelBadge = ({ level }: { level: number }) => {
         }
       `}</style>
     </div>
-  );
-};
+  )
+}

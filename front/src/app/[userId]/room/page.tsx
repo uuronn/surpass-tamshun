@@ -28,7 +28,7 @@ export default function Battle() {
     >
       {/* ボタン */}
       <div className="w-full flex items-center justify-center">
-          <Room />
+        <Room />
       </div>
     </div>
   )

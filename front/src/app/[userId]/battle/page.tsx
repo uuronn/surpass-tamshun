@@ -9,7 +9,6 @@ export default function Battle() {
 
   const handleAction = (actionType: string) => {
     setAction(actionType)
-    console.log(actionType)
   }
 
   return (

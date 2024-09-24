@@ -15,7 +15,7 @@ const DEFENSE_COLOR = 'blue'
 
 const SPEED_LABEL = '速さ'
 const SPEED_VALUE = 120
-const SPEED_COLOR = 'orange'
+const SPEED_COLOR = 'green'
 
 interface StatusBarProps {
   label: string

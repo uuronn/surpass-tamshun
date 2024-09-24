@@ -3,6 +3,7 @@
 import Loading from '@/components/login/Loading'
 import Login from '@/components/login/Login'
 import { User } from '@/type/user'
+import { useRouter } from 'next/navigation'
 import { createContext, useState, useContext, useEffect, ReactNode } from 'react'
 
 const UserContext = createContext<{
@@ -20,20 +21,30 @@ export function useUserContext() {
 }
 
 export function UserProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<User | null | undefined>(undefined) //nullの時は未ログイン、undefinedの時はローディング中、userの時はログイン中
+  const [user, setUser] = useState<User | null | undefined>(undefined) //nullの時は未ログイン、u  ndefinedの時はローディング中、userの時はログイン中
+
+  const router = useRouter()
 
   useEffect(() => {
     setUser(undefined)
-    const storedUser = localStorage.getItem('userId')
-    console.log(storedUser, 'ログイン中のユーザー')
-    if (storedUser) {
+    const currentPage = window.location.pathname.split('/')[-1]
+    const localUserId = localStorage.getItem('userId')
+    if (localUserId) {
       setUser({
-        userId: storedUser,
+        userId: localUserId,
         email: '',
         name: '',
       })
+      if (currentPage === 'battle') {
+        router.push(`/${localUserId}/battle`)
+      } else if (currentPage === 'training') {
+        router.push(`/${localUserId}/training`)
+      } else {
+        router.push(`/${localUserId}`)
+      }
     } else {
       setUser(null)
+      router.push('/')
     }
   }, []) //ログイン状態を確認する処理
 

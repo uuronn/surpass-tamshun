@@ -18,7 +18,6 @@ export default function Home() {
     setLoading(true)
     setMessage('')
     try {
-      console.log(message)
       await new Promise((resolve) => setTimeout(resolve, 2000)) // 2秒待つ
     } finally {
       setLoading(false)

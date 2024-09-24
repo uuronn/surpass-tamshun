@@ -5,7 +5,7 @@ import { Sword, Shield, Zap } from 'lucide-react'
 
 type ButtonType = '攻撃' | '防御' | 'わざ'
 
-export default function PokemonBattleButtons() {
+export default function BattleButtons() {
   const [selectedButton, setSelectedButton] = useState<ButtonType | null>(null)
 
   const buttons: { type: ButtonType; icon: React.ReactNode; color: string }[] = [

@@ -92,9 +92,30 @@ function SignIn(isLoading: boolean) {
 }
 
 function SignUp(isLoading: boolean) {
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    // ログイン処理をここに追加
+    const form = e.currentTarget as HTMLFormElement
+    const formData = new FormData(form)
+    const name = formData.get('name')
+    const email = formData.get('email')
+    const password = formData.get('password')
+    console.log('名前:', name)
+    console.log('メール:', email)
+    console.log('password:', password)
     // 新規登録処理をここに追加
+    const res = await fetch('http://localhost/api/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        name: name,
+        email: email,
+        password: password,
+      }),
+    })
+    console.log('res', res)
   }
 
   return (
@@ -109,7 +130,8 @@ function SignUp(isLoading: boolean) {
             ユーザー名
           </Label>
           <Input
-            id="username"
+            id="name"
+            name="name"
             placeholder=""
             className="rounded-md border-2 border-red-400 focus:border-yellow-500 focus:ring-yellow-500 placeholder-red-300"
           />
@@ -120,6 +142,7 @@ function SignUp(isLoading: boolean) {
           </Label>
           <Input
             id="email"
+            name="email"
             type="email"
             placeholder=""
             className="rounded-md border-2 border-red-400 focus:border-yellow-500 focus:ring-yellow-500 placeholder-red-300"
@@ -131,6 +154,7 @@ function SignUp(isLoading: boolean) {
           </Label>
           <Input
             id="password"
+            name="password"
             type="password"
             placeholder=""
             className="rounded-md border-2 border-red-400 focus:border-yellow-500 focus:ring-yellow-500 placeholder-red-300"

@@ -19,9 +19,9 @@ class AuthController extends Controller
 //            'password' => 'required|string|min:8|confirmed',
 //        ]);
 
-        var_dump($request->name);
-        var_dump($request->email);
-        var_dump(Hash::make($request->password));
+//        var_dump($request->name);
+//        var_dump($request->email);
+//        var_dump(Hash::make($request->password));
 
         $user = User::create([
             'id' => Str::uuid()->toString(),

@@ -14,7 +14,7 @@ export type UserContextType = User
 
 const AuthContext = createContext<{
   user: UserContextType | null | undefined
-  fetchUser: () => void
+  fetchUser:() => void
   setUser: React.Dispatch<React.SetStateAction<UserContextType | null | undefined>>
 }>({
   user: undefined,

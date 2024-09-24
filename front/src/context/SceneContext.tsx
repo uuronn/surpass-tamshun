@@ -7,7 +7,7 @@ export type Scene = 'home' | 'battle' | 'training'
 
 const SceneContext = createContext<{
   scene: Scene
-  setScene: (scene: Scene) => void
+  setScene:(scene: Scene) => void
 }>({
   scene: 'home',
   setScene: () => {},

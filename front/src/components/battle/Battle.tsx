@@ -1,20 +1,21 @@
-import { useState } from 'react';
+import { useState } from 'react'
 import PokemonBattleButtons from './Battle_buttons'
+import Image from 'next/image'
 
 export default function Battle() {
-  const [action, setAction] = useState('');
+  const [action, setAction] = useState('')
 
   const handleAction = (actionType: string) => {
-    setAction(actionType);
-    console.log(actionType);
-  };
+    setAction(actionType)
+    console.log(actionType)
+  }
 
   return (
     <div
       style={{
         height: '100vh',
         width: '100vw',
-        backgroundImage: `url('/battle.jpg')`, // 背景画像
+        backgroundImage: `url('/battle.jpg')`,
         backgroundSize: 'cover',
         display: 'flex',
         flexDirection: 'column',
@@ -31,8 +32,8 @@ export default function Battle() {
           width: '100%',
         }}
       >
-        <img src="/battleshuzo.png" alt="shuozo 1" style={{ height: '400px' }} />
-        <img src="/battleshuzo.png" alt="shuzo 2" style={{ height: '400px' }} />
+        <Image src="/battleshuzo.png" alt="shuozo 1" height={400} width={400} />
+        <Image src="/battleshuzo.png" alt="shuzo 2" height={400} width={400} />
       </div>
 
       {/* ボタン */}
@@ -42,5 +43,5 @@ export default function Battle() {
         </div>
       </div>
     </div>
-  );
+  )
 }

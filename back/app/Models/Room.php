@@ -40,6 +40,11 @@ class Room extends Model
         'host_user_guard_power',
         'host_user_hit_point',
         'host_user_skills',
+
+        'join_user_id',
+        'join_user_attack_power',
+        'join_user_guard_power',
+        'join_user_hit_point'
     ];
 
 }

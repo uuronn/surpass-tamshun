@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
@@ -18,10 +19,16 @@ class AuthController extends Controller
 //            'password' => 'required|string|min:8|confirmed',
 //        ]);
 
+        var_dump($request->name);
+        var_dump($request->email);
+        var_dump(Hash::make($request->password));
+
         $user = User::create([
+            'id' => Str::uuid()->toString(),
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+
         ]);
 
         return response()->json(['user' => $user], 201);

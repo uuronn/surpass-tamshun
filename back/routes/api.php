@@ -17,3 +17,5 @@ Route::post('/login', [AuthController::class, 'authenticate'])->withoutMiddlewar
 Route::post('/conversation', [ConversationController::class, 'store'])->withoutMiddleware([VerifyCsrfToken::class]);
 
 Route::post('/openai/generate', [OpenAIController::class, 'generateText']);
+
+Route::post('/openai/training', [OpenAIController::class, 'training']);

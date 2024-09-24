@@ -14,6 +14,11 @@ class User extends Authenticatable
 
     // プライマリキーを uuid に設定
     protected $keyType = 'string';
+
+    protected $casts = [
+        // 他のキャスト...
+        'hot_words' => 'array',
+    ];
     public $incrementing = false;  // 自動増分を無効化
 
     // UUID を自動生成
@@ -34,6 +39,7 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
+        'id',
         'name',
         'email',
         'password',

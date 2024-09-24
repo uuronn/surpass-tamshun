@@ -14,7 +14,7 @@ export type UserContextType = User | null
 
 const AuthContext = createContext<{
   user: UserContextType | null | undefined
-  fetchUser: () => void
+  fetchUser:() => void
 }>({
   user: undefined,
   fetchUser: () => {},

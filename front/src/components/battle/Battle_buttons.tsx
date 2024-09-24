@@ -1,7 +1,7 @@
-"use client"
+'use client'
 
 import { useState } from 'react'
-import { Sword, Shield, Zap } from "lucide-react"
+import { Sword, Shield, Zap } from 'lucide-react'
 
 type ButtonType = '攻撃' | '防御' | 'わざ'
 

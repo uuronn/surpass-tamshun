@@ -32,8 +32,8 @@ export default function Battle() {
           width: '100%',
         }}
       >
-        <Image src="/battleshuzo.png" alt="shuozo 1" height={400} width={400} />
-        <Image src="/battleshuzo.png" alt="shuzo 2" height={400} width={400} />
+        <Image src="/battleshuzo.png" alt="shuozo 1" height={300} width={300} />
+        <Image src="/battleshuzo.png" alt="shuzo 2" height={300} width={300} />
       </div>
 
       {/* ボタン */}

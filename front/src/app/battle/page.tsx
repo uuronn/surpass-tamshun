@@ -1,6 +1,8 @@
+'use client'
+
 import { useState } from 'react'
-import PokemonBattleButtons from './Battle_buttons'
 import Image from 'next/image'
+import BattleButtons from '@/components/battle/ButtleButtons'
 
 export default function Battle() {
   const [action, setAction] = useState('')
@@ -39,7 +41,7 @@ export default function Battle() {
       {/* ボタン */}
       <div className="flex items-center justify-center">
         <div className="w-full max-w-md">
-          <PokemonBattleButtons />
+          <BattleButtons />
         </div>
       </div>
     </div>

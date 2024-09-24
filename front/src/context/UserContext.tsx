@@ -7,7 +7,7 @@ import { createContext, useState, useContext, useEffect, ReactNode } from 'react
 
 const UserContext = createContext<{
   user: User | null | undefined
-  fetchUser: () => void
+  fetchUser:() => void
   setUser: React.Dispatch<React.SetStateAction<User | null | undefined>>
 }>({
   user: undefined,

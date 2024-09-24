@@ -20,6 +20,8 @@ Route::post('/room', [RoomController::class, 'createRoom'])->withoutMiddleware([
 
 Route::put('/joinRoom', [RoomController::class, 'joinRoom'])->withoutMiddleware([VerifyCsrfToken::class]);
 
+Route::post('/getRoom', [RoomController::class, 'getRoom'])->withoutMiddleware([VerifyCsrfToken::class]);
+
 Route::get('/users/{userId}', [UserController::class, 'currentUser'])->withoutMiddleware([VerifyCsrfToken::class]);
 
 Route::post('/conversation', [ConversationController::class, 'store'])->withoutMiddleware([VerifyCsrfToken::class]);

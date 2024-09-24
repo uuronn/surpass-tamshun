@@ -22,6 +22,6 @@ Route::get('/users/{userId}', [UserController::class, 'currentUser'])->withoutMi
 
 Route::post('/conversation', [ConversationController::class, 'store'])->withoutMiddleware([VerifyCsrfToken::class]);
 
-Route::post('/openai/generate', [OpenAIController::class, 'generateText']);
+Route::post('/openai/generate', [OpenAIController::class, 'generateText'])->withoutMiddleware([VerifyCsrfToken::class]);
 
-Route::post('/openai/training', [OpenAIController::class, 'training']);
+Route::post('/openai/training', [OpenAIController::class, 'training'])->withoutMiddleware([VerifyCsrfToken::class]);

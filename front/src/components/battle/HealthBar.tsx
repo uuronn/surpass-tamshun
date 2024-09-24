@@ -8,7 +8,7 @@ interface HealthBarProps {
 }
 
 export default function HealthBar({ currentHP, maxHP }: HealthBarProps) {
-  const [displayHP, setDisplayHP] = useState(currentHP)
+  const [displayHP, setDisplayHP] = useState<number>(currentHP)
 
   useEffect(() => {
     // Animate HP change

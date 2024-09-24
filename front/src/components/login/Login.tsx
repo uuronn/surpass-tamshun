@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Sun, Flame, Zap, UserPlus, LogIn } from 'lucide-react'
-import { useAuthContext } from '@/context/AuthContext'
+import { useUserContext } from '@/context/UserContext'
 
 export default function Login() {
   const [isLoading, setIsLoading] = useState(false)
@@ -41,7 +41,7 @@ export default function Login() {
 }
 
 function SignIn(isLoading: boolean) {
-  const { setUser } = useAuthContext()
+  const { setUser } = useUserContext()
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     // ログイン処理をここに追加
@@ -120,7 +120,7 @@ function SignIn(isLoading: boolean) {
 }
 
 function SignUp(isLoading: boolean) {
-  const { setUser } = useAuthContext()
+  const { setUser } = useUserContext()
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 

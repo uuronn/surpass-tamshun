@@ -1,6 +1,5 @@
-// import { NextAuthProvider } from '@/lib/NextAuthProvider'
+import { UserProvider } from '@/context/UserContext'
 import './globals.css'
-import { AuthProvider } from '@/context/AuthContext'
 
 export default function RootLayout({
   children,
@@ -10,9 +9,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body style={{ height: '100vh', width: '100vw' }}>
-        {/* <NextAuthProvider> */}
-        <AuthProvider>{children}</AuthProvider>
-        {/* </NextAuthProvider> */}
+        <UserProvider>{children}</UserProvider>
       </body>
     </html>
   )

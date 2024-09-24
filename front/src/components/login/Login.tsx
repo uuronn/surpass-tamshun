@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Sun, Flame, Zap, UserPlus, LogIn } from 'lucide-react'
+import { useAuthContext } from '@/context/AuthContext'
 
 export default function Login() {
   const [isLoading, setIsLoading] = useState(false)
@@ -40,9 +41,34 @@ export default function Login() {
 }
 
 function SignIn(isLoading: boolean) {
-  const handleSubmit = (e: React.FormEvent) => {
+  const { setUser } = useAuthContext()
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     // ログイン処理をここに追加
+    const form = e.currentTarget as HTMLFormElement
+    const formData = new FormData(form)
+
+    const email = formData.get('email')
+    const password = formData.get('password')
+
+    console.log('メール:', email)
+    console.log('password:', password)
+    // 新規登録処理をここに追加
+
+    const res = await fetch('http://localhost/api/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email: email,
+        password: password,
+      }),
+    })
+    const result = await res.json()
+    const userId = result.user.id
+    localStorage.setItem('userId', userId)
+    setUser({ userId: userId, name: '', email: '' })
   }
 
   return (
@@ -57,6 +83,7 @@ function SignIn(isLoading: boolean) {
             メールアドレス
           </Label>
           <Input
+            name="email"
             id="email"
             type="email"
             placeholder=""
@@ -68,6 +95,7 @@ function SignIn(isLoading: boolean) {
             パスワード
           </Label>
           <Input
+            name="password"
             id="password"
             type="password"
             placeholder=""
@@ -92,18 +120,17 @@ function SignIn(isLoading: boolean) {
 }
 
 function SignUp(isLoading: boolean) {
+  const { setUser } = useAuthContext()
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+
     // ログイン処理をここに追加
     const form = e.currentTarget as HTMLFormElement
     const formData = new FormData(form)
     const name = formData.get('name')
     const email = formData.get('email')
     const password = formData.get('password')
-    console.log('名前:', name)
-    console.log('メール:', email)
-    console.log('password:', password)
-    // 新規登録処理をここに追加
+
     const res = await fetch('http://localhost/api/register', {
       method: 'POST',
       headers: {
@@ -115,7 +142,12 @@ function SignUp(isLoading: boolean) {
         password: password,
       }),
     })
-    console.log('res', res)
+
+    const result = await res.json() // レスポンスのボディをテキストとして読み取る
+    const userId = result.user.id
+
+    localStorage.setItem('userId', JSON.stringify(userId))
+    setUser(userId)
   }
 
   return (

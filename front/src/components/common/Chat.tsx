@@ -57,7 +57,7 @@ export default function Chat({ message, setMessage, reply, handleSubmit, loading
       <div className="flex items-center justify-center" style={{ height: '20%' }}>
         <Speech text={reply} isVisible={!!reply} loading={loading} />
       </div>
-      <div className="mt-8 w-full max-w-md">
+      <div className="mt-8 mb-8 w-full max-w-md">
         <Input
           className="w-full px-4 py-2 text-lg bg-opacity-80 bg-gray-800 text-white placeholder-gray-400 rounded-full border-2 border-yellow-400 focus:outline-none focus:border-yellow-500"
           placeholder="メッセージを入力"

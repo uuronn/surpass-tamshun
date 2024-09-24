@@ -1,15 +1,31 @@
 'use client'
 
 import { Button } from '../ui/button'
-import HomeChat from './HomeChat'
+import Chat from '../common/Chat'
+import { useState } from 'react'
 
 export default function Home() {
+  const [message, setMessage] = useState('')
+  const [reply, setReply] = useState('ほげほげ')
+  const [loading, setLoading] = useState(false)
+
+  const handleSubmit = async () => {
+    setLoading(true)
+    try {
+      console.log(message)
+      await new Promise((resolve) => setTimeout(resolve, 2000)) // 2秒待つ
+    } finally {
+      setMessage('')
+      setLoading(false)
+    }
+  }
+
   return (
     <div
       style={{
         height: '100%',
         width: '100%',
-        backgroundImage: `url('https://gakaisozai.up.seesaa.net/01247252N000000003/151351867304205811177_BG560a_1280.jpg')`,
+        backgroundImage: `url('/home.jpg')`,
         backgroundSize: 'cover',
         display: 'flex',
       }}
@@ -20,7 +36,14 @@ export default function Home() {
           width: '50%',
         }}
       >
-        <HomeChat />
+        <Chat
+          message={message}
+          setMessage={setMessage}
+          reply={reply}
+          setReply={setReply}
+          handleSubmit={handleSubmit}
+          loading={loading}
+        />
       </div>
       <div
         style={{

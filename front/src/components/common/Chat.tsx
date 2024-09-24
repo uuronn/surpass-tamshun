@@ -1,27 +1,25 @@
 import { useState, useEffect } from 'react'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import Speech from '../common/Speech'
+import Speech from './Speech'
 
-export default function HomeChat() {
-  const [message, setMessage] = useState('')
-  const [characterMessage, setCharacterMessage] = useState('ようこそ、冒険者よ！')
+type chatProps = {
+  message: string
+  setMessage: (message: string) => void
+  reply: string
+  setReply: (message: string) => void
+  handleSubmit: () => void
+  loading: boolean
+}
 
-  const text =
-    'ほげほげほげほげほげほげほげほげほげほげほげほげほげほげほげほげほげほげほげほげほげほげほげほげほげほげ'
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCharacterMessage((prevMessage) =>
-        prevMessage === 'ようこそ、冒険者よ！'
-          ? '何か困ったことはありませんか？'
-          : 'ようこそ、冒険者よ！',
-      )
-    }, 5000)
-
-    return () => clearInterval(interval)
-  }, [])
-
+export default function Chat({
+  message,
+  setMessage,
+  reply,
+  setReply,
+  handleSubmit,
+  loading,
+}: chatProps) {
   return (
     <div
       style={{
@@ -59,8 +57,8 @@ export default function HomeChat() {
           }
         `}</style>
       </div>
-      <div className="flex items-end justify-center" style={{ height: '20%' }}>
-        <Speech text={text} isVisible={!!text} />
+      <div className="flex items-center justify-center" style={{ height: '20%' }}>
+        <Speech text={reply} isVisible={!!reply} loading={loading} />
       </div>
       <div className="mt-8 w-full max-w-md">
         <Input
@@ -71,10 +69,8 @@ export default function HomeChat() {
         />
         <Button
           className="mt-4 w-full bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-bold py-2 px-4 rounded-full transition duration-300 ease-in-out transform hover:scale-105"
-          onClick={() => {
-            setCharacterMessage(message)
-            setMessage('')
-          }}
+          onClick={handleSubmit}
+          disabled={loading}
         >
           送信
         </Button>

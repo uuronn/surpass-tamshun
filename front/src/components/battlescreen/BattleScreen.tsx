@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import React from 'react'
 
 export default function BattleScreen() {
@@ -7,24 +8,24 @@ export default function BattleScreen() {
     <div className="battleScreen">
       {/* 背景画像 */}
       <div className="background">
-        <img
+        <Image
           src="/battle_background.png" // 背景画像のパス
-          alt="Background"
+          alt=""
           className="backgroundImage"
         />
       </div>
 
       {/* キャラクター */}
       <div className="characters">
-        <img
+        <Image
           src="/character.png" // 左側のキャラクター画像
-          alt="Character 1"
+          alt=""
           className="character"
           style={{ left: '10%' }}
         />
-        <img
+        <Image
           src="/character.png" // 右側のキャラクター画像
-          alt="Character 2"
+          alt=""
           className="character"
           style={{ right: '10%' }}
         />

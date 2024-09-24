@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import { useState, useEffect } from 'react'
 
 export default function Loading({ message }: { message: string }) {
@@ -24,8 +25,9 @@ export default function Loading({ message }: { message: string }) {
           transition: 'transform 0.016s linear',
         }}
       >
-        <img
+        <Image
           src="https://up.gc-img.net/post_img_web/2017/07/fJZOQPupjzePYuW_22841.jpeg"
+          alt=""
           className="w-full h-full object-cover"
         />
       </div>

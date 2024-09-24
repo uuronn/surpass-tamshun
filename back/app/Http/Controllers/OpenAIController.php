@@ -16,6 +16,12 @@ class OpenAIController extends Controller
 //            'prompt' => 'required|string',
 //        ]);
 
+        $user = User::find($request->userId);
+
+        $hotWordsString = implode(', ', $user->hot_words);
+
+        // $hotWordsJson = json_encode( $user->hot_words, JSON_UNESCAPED_UNICODE);
+
         $prompt = $request->input('prompt');
 
         $client = new Client();
@@ -31,20 +37,12 @@ class OpenAIController extends Controller
                     'messages' => [
                         [
                             'role' => 'system',
-                            'content' => '
-                            あなたはこの【熱い言葉】投げられて、育ちました。これらを"部分的"に参考に会話してください。
+                            'content' => "
+                            あなたはこの【熱い言葉】投げられて、育ちました。これらを\"部分的\"に参考に会話してください。
                             そのまま使うのはNGです。
 
                             【熱い言葉】
-                            ・呆れた
-                            ・一緒に頑張ろうよ！！俺も頑張るから！！一所懸命、一つの所に命を懸ける。
-                            ・できるできる、君ならできる！！
-                            ・お前は俺の友達だ！
-                            ・お前なんてダメだ。
-                            ・お前は俺のライバルだ！
-                            ・あの太陽みたいに、熱くなれよ
-                            ・どうした？お前の元気はそんなものか！？
-                            ・真剣だからこそ、ぶつかる壁がある。'
+                            {$hotWordsString}"
                         ],
                         [
                             'role' => 'user',

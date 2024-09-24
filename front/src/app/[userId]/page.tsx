@@ -6,11 +6,11 @@ import { useUserContext } from '@/context/UserContext'
 import { useState } from 'react'
 
 export default function Home() {
-  const [message, setMessage] = useState('')
-  const [reply, setReply] = useState('ほげほげ')
-  const [loading, setLoading] = useState(false)
+  const [message, setMessage] = useState<string>('')
+  const [reply, setReply] = useState<string>('')
+  const [loading, setLoading] = useState<boolean>(false)
 
-  const { setUser } = useUserContext()
+  const { user, setUser } = useUserContext()
 
   const logout = () => {
     setUser(null)
@@ -24,8 +24,15 @@ export default function Home() {
     setLoading(true)
     setMessage('')
     try {
-      console.log(message)
-      await new Promise((resolve) => setTimeout(resolve, 2000)) // 2秒待つ
+      const res = await fetch('http://localhost/api/openai/generate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userId: user?.userId, prompt: message }),
+      })
+      const data = await res.json()
+      setReply(data.data)
     } finally {
       setLoading(false)
     }

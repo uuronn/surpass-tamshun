@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Sun, Flame, Zap, UserPlus, LogIn } from 'lucide-react'
 import { useUserContext } from '@/context/UserContext'
+import { useRouter } from 'next/navigation'
 
 export default function Login() {
   const [isLoading, setIsLoading] = useState(false)
@@ -41,6 +42,7 @@ export default function Login() {
 }
 
 function SignIn(isLoading: boolean) {
+  const router = useRouter()
   const { setUser } = useUserContext()
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -50,10 +52,6 @@ function SignIn(isLoading: boolean) {
 
     const email = formData.get('email')
     const password = formData.get('password')
-
-    console.log('メール:', email)
-    console.log('password:', password)
-    // 新規登録処理をここに追加
 
     const res = await fetch('http://localhost/api/login', {
       method: 'POST',
@@ -65,8 +63,9 @@ function SignIn(isLoading: boolean) {
         password: password,
       }),
     })
-    const result = await res.json()
-    const userId = result.user.id
+    const data = await res.json()
+    const userId = data.user.id
+    router.push(`/${userId}`)
     localStorage.setItem('userId', userId)
     setUser({ userId: userId, name: '', email: '' })
   }
@@ -143,8 +142,8 @@ function SignUp(isLoading: boolean) {
       }),
     })
 
-    const result = await res.json() // レスポンスのボディをテキストとして読み取る
-    const userId = result.user.id
+    const data = await res.json() // レスポンスのボディをテキストとして読み取る
+    const userId = data.user.id
 
     localStorage.setItem('userId', JSON.stringify(userId))
     setUser(userId)

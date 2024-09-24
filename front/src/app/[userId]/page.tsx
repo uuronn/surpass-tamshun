@@ -3,6 +3,8 @@
 import Chat from '@/components/common/Chat'
 import { Button } from '@/components/ui/button'
 import { useUserContext } from '@/context/UserContext'
+import { User } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
 export default function Home() {
@@ -11,6 +13,16 @@ export default function Home() {
   const [loading, setLoading] = useState<boolean>(false)
 
   const { user, setUser } = useUserContext()
+
+  const router = useRouter()
+
+  const battleClicked = () => {
+    router.push(`/${user?.userId}/battle`)
+  }
+
+  const trainingClicked = () => {
+    router.push(`/${user?.userId}/training`)
+  }
 
   const logout = () => {
     setUser(null)
@@ -73,7 +85,17 @@ export default function Home() {
           gap: '3rem',
         }}
       >
+        <div className=" flex items-center space-x-4 bg-gradient-to-r from-gray-800 to-gray-900 p-4 rounded-3xl shadow-lg hover:shadow-xl transition-shadow duration-300 max-w-sm">
+          <div className="flex items-center space-x-3">
+            <User className="text-gray-300 h-8 w-8" />
+            <p className="text-2xl font-bold text-white">{user?.name}</p>
+          </div>
+          <div className="flex items-center px-4 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 rounded-full shadow-inner">
+            <span className="text-xl font-semibold text-white">Lv {15}</span>
+          </div>
+        </div>
         <Button
+          onClick={battleClicked}
           type="submit"
           className="w-2/3 h-32  rounded-3xl bg-gradient-to-r from-red-500 to-yellow-500 hover:from-red-600 hover:to-yellow-600 text-white font-bold py-3 px-6 text-3xl transition-all duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50 uppercase"
           disabled={false}
@@ -81,6 +103,7 @@ export default function Home() {
           対戦
         </Button>
         <Button
+          onClick={trainingClicked}
           type="submit"
           className="w-2/3 h-32 rounded-3xl bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-bold py-3 px-6 text-3xl transition-all duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 uppercase"
           disabled={false}

@@ -8,7 +8,7 @@ import { createContext, useState, useContext, useEffect, ReactNode } from 'react
 
 const UserContext = createContext<{
   user: User | null | undefined
-  fetchUser:() => void
+  fetchUser: () => void
   setUser: React.Dispatch<React.SetStateAction<User | null | undefined>>
 }>({
   user: undefined,
@@ -59,8 +59,7 @@ export function UserProvider({ children }: { children: ReactNode }) {
 
   return (
     <UserContext.Provider value={{ user, fetchUser, setUser }}>
-      {/* {user ? children : user === null ? <Login /> : <Loading message="ユーザー情報を取得中..." />} */}
-      {children}
+      {user ? children : user === null ? <Login /> : <Loading message="ユーザー情報を取得中..." />}
     </UserContext.Provider>
   )
 }

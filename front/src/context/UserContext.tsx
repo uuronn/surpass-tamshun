@@ -62,6 +62,8 @@ export function UserProvider({ children }: { children: ReactNode }) {
             router.push(`/${localUserId}/room`)
           } else if (currentPage === 'training') {
             router.push(`/${localUserId}/training`)
+          } else if (currentPage === 'result') {
+            router.push(`/${localUserId}/result`)
           } else {
             router.push(`/${localUserId}`)
           }

@@ -133,11 +133,54 @@ export default forwardRef<UnitRef>(function Unit(props, ref) {
               style={{
                 objectFit: 'contain',
               }}
+              unoptimized
             />
           </div>
         )}
-        {/* 他のエフェクトも同様に表示 */}
-        {/* 数値の表示 */}
+        {effect?.type === 'flame' && (
+          <div
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              width: '100%',
+              height: '100%',
+              pointerEvents: 'none',
+            }}
+          >
+            <Image
+              src="/flame.gif"
+              alt=""
+              fill
+              style={{
+                objectFit: 'contain',
+              }}
+              unoptimized
+            />
+          </div>
+        )}
+        {effect?.type === 'heal' && (
+          <div
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              width: '100%',
+              height: '100%',
+              pointerEvents: 'none',
+            }}
+          >
+            <Image
+              src="/heart.gif"
+              alt=""
+              fill
+              style={{
+                objectFit: 'contain',
+              }}
+              unoptimized
+            />
+          </div>
+        )}
         {effect && effect.value !== 0 && (
           <div
             style={{

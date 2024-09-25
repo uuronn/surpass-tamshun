@@ -26,7 +26,7 @@ export default function Battle() {
       await triggerEffect(0, 'heal', 20) // ユニット0にヒール20を適用
       await triggerEffect(0, 'left', 0) // 値が0なので数値は表示されない
       await triggerEffect(0, 'right', 0) // 同上
-      await triggerEffect(0, 'blink', 30) // 同上
+      await triggerEffect(0, 'blink', -30) // 同上
     }
     runEffects()
   }, [])

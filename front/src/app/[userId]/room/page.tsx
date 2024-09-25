@@ -169,7 +169,6 @@ const RoomCreationButton = () => {
 
       if (res.ok) {
         const data = await res.json()
-        console.log('Room created successfully:', data)
         createRoom() // ルーム作成の他の処理を実行
       } else {
         console.error('Failed to create room.')

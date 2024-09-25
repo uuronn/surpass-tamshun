@@ -8,15 +8,18 @@ import { useUserContext } from './UserContext'
 import Matched from '@/components/room/Matched'
 import xpToLevel from '@/lib/xpToLevel'
 import { User } from '@/type/user'
+import isEqual from 'lodash.isequal'
 
 const RoomContext = createContext<{
   currentRoom: Room | null | undefined
   getCurrentRoom:() => void
+  prevRoom: Room | null | undefined
   createRoom: () => void
   joinRoom: (roomId: string) => void
 }>({
   currentRoom: undefined,
   getCurrentRoom: () => {},
+  prevRoom: undefined,
   createRoom: () => {},
   joinRoom: () => {},
 })
@@ -26,25 +29,17 @@ export function useRoomContext() {
 }
 
 export function RoomProvider({ children }: { children: ReactNode }) {
+  const [prevRoom, setPrevRoom] = useState<Room | null | undefined>(undefined)
   const [currentRoom, setCurrentRoom] = useState<Room | null | undefined>(undefined)
-  const [hostUserInfo, setHostUserInfo] = useState<User | null | undefined>(undefined)
-  const [joinUserInfo, setJoinUserInfo] = useState<User | null | undefined>(undefined)
 
   const { user, getUser } = useUserContext()
 
   const router = useRouter()
 
-  const loadUserInfo = async () => {
-    if (currentRoom?.hostUserId) {
-      const hostUser = await getUser(currentRoom?.hostUserId)
-    }
-    if (currentRoom?.joinUserId) {
-      const joinUser = await getUser(currentRoom?.joinUserId)
-    }
-  }
-
-  // ゲームが終了するまで取得し続ける
   const getCurrentRoom = async (): Promise<void> => {
+    // 前回の部屋情報を保持
+    const prevRoomData = currentRoom ? { ...currentRoom } : null
+
     const res = await fetch('http://localhost/api/getRoom', {
       method: 'POST',
       headers: {
@@ -57,28 +52,45 @@ export function RoomProvider({ children }: { children: ReactNode }) {
     const data = await res.json()
     const roomData = data.room
 
-    await loadUserInfo()
-    setCurrentRoom({
+    // ユーザー情報を取得
+    const hostUserInfo = await getUser(roomData.host_user_id)
+    const joinUserInfo = roomData.join_user_id ? await getUser(roomData.join_user_id) : null
+
+    // 新しい部屋情報を作成
+    const newRoom: Room = {
       roomId: roomData.id,
       hostUserId: roomData.host_user_id,
-      hostName: hostUserInfo?.name || currentRoom?.hostName || '修造1',
+      hostName: 'ホスト',
       hostAttack: roomData.host_user_attack_power,
       hostGuard: roomData.host_user_guard_power,
       hostSpeed: roomData.host_user_speed_power,
       hostHp: roomData.host_user_hit_point,
-      hostMaxHp: hostUserInfo?.hp || 100,
-      hostXp: hostUserInfo?.xp || currentRoom?.hostXp || roomData.host_xp,
+      hostMaxHp: 100,
+      hostXp: 300,
       joinUserId: roomData.join_user_id,
-      joinName: joinUserInfo?.name || currentRoom?.joinName || '修造２',
+      joinName: 'ゲスト',
       joinAttack: roomData.join_user_attack_power,
       joinGuard: roomData.join_user_guard_power,
       joinSpeed: roomData.join_user_speed_power,
       joinHp: roomData.join_user_hit_point,
-      joinMaxHp: joinUserInfo?.hp || 100,
-      joinXp: joinUserInfo?.xp || currentRoom?.joinXp || roomData.join_xp,
+      joinMaxHp: 100,
+      joinXp: 300,
+      turn: roomData?.currentTurnUser,
       isConnected: roomData.is_connect,
       isFinished: roomData.is_battle_finish,
-    })
+    }
+
+    // 差分の検出
+    const isDifferent = !isEqual(prevRoomData, newRoom)
+
+    if (!prevRoom) {
+      setPrevRoom(newRoom)
+    }
+
+    if (isDifferent) {
+      setCurrentRoom(newRoom)
+      setPrevRoom(prevRoomData)
+    }
   }
 
   const createRoom = async (): Promise<void> => {
@@ -92,7 +104,7 @@ export function RoomProvider({ children }: { children: ReactNode }) {
       }),
     })
     const data = await res.json()
-    const roomId = data.room.room_id
+    const roomId = data.room.id
     const userId = user?.userId
     if (!userId) {
       return
@@ -115,6 +127,7 @@ export function RoomProvider({ children }: { children: ReactNode }) {
       joinHp: null,
       joinXp: null,
       joinMaxHp: null,
+      turn: null,
       isConnected: false,
       isFinished: false,
     }
@@ -122,8 +135,8 @@ export function RoomProvider({ children }: { children: ReactNode }) {
     setCurrentRoom(roomData)
   }
   const joinRoom = async (roomId: string): Promise<void> => {
-    const res = await fetch('http://localhost/api/joinRoom', {
-      method: 'POST',
+    await fetch('http://localhost/api/joinRoom', {
+      method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
       },
@@ -132,7 +145,31 @@ export function RoomProvider({ children }: { children: ReactNode }) {
         join_user_id: user?.userId,
       }),
     })
-    const data = await res.json()
+
+    const roomData: Room = {
+      roomId: roomId,
+      hostUserId: null,
+      hostName: null,
+      hostAttack: null,
+      hostGuard: null,
+      hostSpeed: null,
+      hostHp: null,
+      hostMaxHp: null,
+      hostXp: null,
+      joinUserId: null,
+      joinName: null,
+      joinAttack: null,
+      joinGuard: null,
+      joinSpeed: null,
+      joinHp: null,
+      joinXp: null,
+      joinMaxHp: null,
+      turn: null,
+      isConnected: false,
+      isFinished: false,
+    }
+
+    setCurrentRoom(roomData)
   }
 
   useEffect(() => {
@@ -179,6 +216,8 @@ export function RoomProvider({ children }: { children: ReactNode }) {
           .find((room: any) => room.hostUserId === user?.userId || room.joinUserId === user?.userId)
         if (room) {
           setCurrentRoom(room)
+        } else {
+          router.push(`/${user?.userId}`)
         }
       } catch (error) {
         console.error('Error fetching room list:', error)
@@ -192,13 +231,13 @@ export function RoomProvider({ children }: { children: ReactNode }) {
   const connected = currentRoom?.isConnected
 
   useEffect(() => {
-    if (isHost && matched && connected) {
+    if (matched && connected) {
       router.push(`/${user?.userId}/battle`)
     }
   }, [isHost, matched, connected])
 
   return (
-    <RoomContext.Provider value={{ currentRoom, getCurrentRoom, createRoom, joinRoom }}>
+    <RoomContext.Provider value={{ currentRoom, getCurrentRoom, prevRoom, createRoom, joinRoom }}>
       {/* {!(currentRoom !== undefined && currentRoom?.isConnected == false) ? (
         children
       ) : currentRoom !== undefined &&
@@ -238,6 +277,8 @@ export function RoomProvider({ children }: { children: ReactNode }) {
             imageUrl: '/shuzohonki.png',
           }}
         />
+      ) : !isHost && !connected ? (
+        <Loading message="相手の承認を待っています..." />
       ) : (
         children
       )}

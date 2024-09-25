@@ -16,6 +16,7 @@ export type Room = {
   joinHp: number | null
   joinMaxHp: number | null
   joinXp: number | null
+  turn: string | null
   isConnected: boolean
   isFinished: boolean
 }

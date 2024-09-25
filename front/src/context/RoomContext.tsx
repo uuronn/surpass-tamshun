@@ -12,7 +12,7 @@ import isEqual from 'lodash.isequal'
 
 const RoomContext = createContext<{
   currentRoom: Room | null | undefined
-  getCurrentRoom: () => void
+  getCurrentRoom:() => void
   prevRoom: Room | null | undefined
   createRoom: () => void
   joinRoom: (roomId: string) => void

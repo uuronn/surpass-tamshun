@@ -8,11 +8,11 @@ import { createContext, useState, useContext, useEffect, ReactNode } from 'react
 
 const UserContext = createContext<{
   user: User | null | undefined
-  fetchUser:(userId: string) => Promise<User>
+  getUser:(userId: string) => Promise<User>
   setUser: React.Dispatch<React.SetStateAction<User | null | undefined>>
 }>({
   user: undefined,
-  fetchUser: (userId: string) => new Promise<User>(() => {}),
+  getUser: () => new Promise<User>(() => {}),
   setUser: () => {},
 })
 
@@ -25,7 +25,7 @@ export function UserProvider({ children }: { children: ReactNode }) {
 
   const router = useRouter()
 
-  const fetchUser = async (userId: string): Promise<User> => {
+  const getUser = async (userId: string): Promise<User> => {
     const res = await fetch(`http://localhost/api/users/${userId}`, {
       method: 'GET',
       headers: {
@@ -52,12 +52,14 @@ export function UserProvider({ children }: { children: ReactNode }) {
       const localUserId = localStorage.getItem('userId')
       if (localUserId !== null && localUserId !== undefined) {
         try {
-          const userData = await fetchUser(localUserId) // fetchUserをawaitで待つ
+          const userData = await getUser(localUserId) // getUserをawaitで待つ
           setUser(userData) // fetchしたユーザーデータをセット
 
           // ページに応じてリダイレクト
           if (currentPage === 'battle') {
             router.push(`/${localUserId}/battle`)
+          } else if (currentPage === 'room') {
+            router.push(`/${localUserId}/room`)
           } else if (currentPage === 'training') {
             router.push(`/${localUserId}/training`)
           } else {
@@ -77,7 +79,7 @@ export function UserProvider({ children }: { children: ReactNode }) {
   }, [router]) // router依存を追加
 
   return (
-    <UserContext.Provider value={{ user, fetchUser, setUser }}>
+    <UserContext.Provider value={{ user, getUser, setUser }}>
       {user ? children : user === null ? <Login /> : <Loading message="ユーザー情報を取得中..." />}
     </UserContext.Provider>
   )

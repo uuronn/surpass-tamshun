@@ -27,7 +27,7 @@ export default function Loading({ message }: { message: string }) {
         }}
       >
         <Image
-          src="/syuzo_sun.jpg"
+          src="/sun.png"
           alt=""
           className="w-full h-full object-cover"
           width={500}

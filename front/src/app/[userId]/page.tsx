@@ -17,7 +17,7 @@ export default function Home() {
   const router = useRouter()
 
   const battleClicked = () => {
-    router.push(`/${user?.userId}/battle`)
+    router.push(`/${user?.userId}/room`)
   }
 
   const trainingClicked = () => {
@@ -55,7 +55,7 @@ export default function Home() {
       style={{
         height: '100%',
         width: '100%',
-        backgroundImage: `url('/home.jpg')`,
+        backgroundImage: `url('/home.png')`,
         backgroundSize: 'cover',
         display: 'flex',
       }}

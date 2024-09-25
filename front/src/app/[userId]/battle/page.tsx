@@ -36,7 +36,7 @@ export default function Battle() {
       style={{
         height: '100%',
         width: '100%',
-        backgroundImage: `url('/battle.jpg')`,
+        backgroundImage: `url('/battle.png')`,
         backgroundSize: 'cover',
         display: 'flex',
         flexDirection: 'column',

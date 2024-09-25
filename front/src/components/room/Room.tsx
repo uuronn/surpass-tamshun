@@ -61,7 +61,7 @@ const StatusBar = ({
 export default function Room() {
   return (
     <div className="container">
-      <RoomCreationButton />
+      {/* <RoomCreationButton /> */}
 
       {/* 水平スクロールコンテナ */}
       <div className="scrollContainer">

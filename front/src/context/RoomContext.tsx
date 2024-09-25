@@ -9,10 +9,12 @@ import Matched from '@/components/room/Matched'
 import xpToLevel from '@/lib/xpToLevel'
 import { User } from '@/type/user'
 import isEqual from 'lodash.isequal'
+import Result from '@/app/[userId]/result/page'
+import { Button } from '@/components/ui/button'
 
 const RoomContext = createContext<{
   currentRoom: Room | null | undefined
-  getCurrentRoom:() => void
+  getCurrentRoom: () => void
   prevRoom: Room | null | undefined
   createRoom: () => void
   joinRoom: (roomId: string) => void
@@ -31,6 +33,7 @@ export function useRoomContext() {
 export function RoomProvider({ children }: { children: ReactNode }) {
   const [prevRoom, setPrevRoom] = useState<Room | null | undefined>(undefined)
   const [currentRoom, setCurrentRoom] = useState<Room | null | undefined>(undefined)
+  const [loading, setLoading] = useState<boolean>()
 
   const { user } = useUserContext()
 
@@ -51,6 +54,7 @@ export function RoomProvider({ children }: { children: ReactNode }) {
     })
     const data = await res.json()
     const roomData = data.room
+    console.log(roomData)
 
     // 新しい部屋情報を作成
     const newRoom: Room = {
@@ -87,6 +91,8 @@ export function RoomProvider({ children }: { children: ReactNode }) {
       setCurrentRoom(newRoom)
       setPrevRoom(prevRoomData)
     }
+
+    if (loading) setLoading(false)
   }
 
   const createRoom = async (): Promise<void> => {
@@ -181,6 +187,7 @@ export function RoomProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const fetchRoomList = async () => {
+      setLoading(true)
       try {
         const res = await fetch('http://localhost/api/getListRoom', {
           method: 'GET',
@@ -214,6 +221,7 @@ export function RoomProvider({ children }: { children: ReactNode }) {
         if (room) {
           setCurrentRoom(room)
         } else {
+          setLoading(false)
           router.push(`/${user?.userId}`)
         }
       } catch (error) {
@@ -233,36 +241,34 @@ export function RoomProvider({ children }: { children: ReactNode }) {
     }
   }, [isHost, matched, connected])
 
+  const back = async () => {
+    await fetch('http://localhost/api/deleteRoom', {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        room_id: currentRoom?.roomId,
+      }),
+    })
+    setCurrentRoom(undefined)
+    router.push(`/${user?.userId}/room`)
+  }
+
   return (
     <RoomContext.Provider value={{ currentRoom, getCurrentRoom, prevRoom, createRoom, joinRoom }}>
-      {/* {!(currentRoom !== undefined && currentRoom?.isConnected == false) ? (
-        children
-      ) : currentRoom !== undefined &&
-        currentRoom?.isConnected == false &&
-        currentRoom?.hostUserId == user?.userId &&
-        currentRoom?.joinUserId == null ? (
-        <Loading message="対戦相手を検索中..." /> ? (
-          currentRoom !== undefined &&
-          currentRoom?.isConnected == false &&
-          currentRoom?.hostUserId == user?.userId &&
-          currentRoom?.joinUserId !== null ? (
-            <Matched
-              opponent={{
-                name: currentRoom?.joinName || '名無しの修造',
-                level: xpToLevel(currentRoom?.joinXp || 0),
-                attack: currentRoom?.joinAttack || 0,
-                guard: currentRoom?.joinGuard || 0,
-                speed: currentRoom?.joinSpeed || 0,
-                imageUrl: '/shuzohonki.png',
-              }}
-            />
-          ) : null
-        ) : null
-      ) : (
-        children
-      )} */}
       {isHost && !matched ? (
-        <Loading message="対戦相手を待っています..." />
+        <>
+          <Button
+            onClick={back}
+            type="submit"
+            className="w-48 h-16 m-3 rounded-3xl bg-gradient-to-r from-gray-500 to-gray-600 hover:from-gray-600 hover:to-gray-700 text-white font-bold py-3 px-6 text-2xl transition-all duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50 uppercase fixed bottom-0 left-0"
+            disabled={false}
+          >
+            戻る
+          </Button>
+          <Loading message="対戦相手を待っています..." />
+        </>
       ) : isHost && matched && !connected ? (
         <Matched
           opponent={{
@@ -276,6 +282,10 @@ export function RoomProvider({ children }: { children: ReactNode }) {
         />
       ) : !isHost && !connected && !!currentRoom ? (
         <Loading message="相手の承認を待っています..." />
+      ) : loading ? (
+        <Loading message="対戦情報を取得しています..." />
+      ) : currentRoom?.isFinished ? (
+        <Result />
       ) : (
         children
       )}

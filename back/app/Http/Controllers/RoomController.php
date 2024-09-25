@@ -156,4 +156,13 @@ class RoomController extends Controller
         return response()->json(['status' => 201]);
     }
 
+    public function getListRoom()
+    {
+        $room = Room::all();
+
+
+        return response()->json(['roomList'=> $room,'status' => 201]);
+    }
+
+
 }

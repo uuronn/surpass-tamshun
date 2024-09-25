@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, use } from 'react'
 import BattleButtons from '@/components/battle/BattleButtons'
 import Unit, { UnitRef } from '@/components/battle/Unit'
 import Log from '@/components/battle/Log'
@@ -10,6 +10,7 @@ import { useRoomContext } from '@/context/RoomContext'
 import { UnitParameters } from '@/type/unit'
 import { useUserContext } from '@/context/UserContext'
 import { Room } from '@/type/room'
+import { useRouter } from 'next/navigation'
 
 export default function Battle() {
   const [loading, setLoading] = useState<boolean>(false)
@@ -20,6 +21,8 @@ export default function Battle() {
 
   const { user } = useUserContext()
   const { currentRoom, prevRoom } = useRoomContext()
+
+  const router = useRouter()
 
   const unitRefs = [useRef<UnitRef>(null), useRef<UnitRef>(null)]
 
@@ -157,6 +160,10 @@ export default function Battle() {
       // 自分のターンかどうかを更新
       setTurn(currentRoom.turn === user?.userId)
     }
+
+    // if (currentRoom.isFinished) {
+    //   router.push(`/${user?.userId}/result`)
+    // }
   }, [currentRoom])
 
   return (

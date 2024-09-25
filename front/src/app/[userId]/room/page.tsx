@@ -15,7 +15,6 @@ export default function Room() {
   const { user } = useUserContext()
   const router = useRouter()
 
-  // useEffectでルームリストを取得する
   useEffect(() => {
     const fetchRoomList = async () => {
       try {
@@ -152,35 +151,9 @@ export default function Room() {
 const RoomCreationButton = () => {
   const { createRoom } = useRoomContext()
 
-  // 新しいルームを作成し、APIにリクエストを送信する関数
-  const handleCreateRoom = async () => {
-    try {
-      // APIリクエストをPOSTで送信
-      const res = await fetch('http://localhost/api/room', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          host_user_id: window.localStorage.getItem('userId'),
-          // hostComment: window.localStorage.getItem('comment'),
-        }),
-      })
-
-      if (res.ok) {
-        const data = await res.json()
-        createRoom() // ルーム作成の他の処理を実行
-      } else {
-        console.error('Failed to create room.')
-      }
-    } catch (error) {
-      console.error('Error creating room:', error)
-    }
-  }
-
   return (
     <Button
-      onClick={handleCreateRoom} // ボタンがクリックされた時にAPIを呼び出す
+      onClick={createRoom} // ボタンがクリックされた時にAPIを呼び出す
       className="createRoomButton hover:scale-110 hover:shadow-lg transition-transform duration-300 ease-in-out"
     >
       <Image src="/createRoom.png" alt="Create Room" width={100} height={100} />

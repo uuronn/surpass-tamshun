@@ -22,12 +22,12 @@ export default function Battle() {
 
   useEffect(() => {
     const runEffects = async () => {
-      await triggerEffect(0, 'fire', 0) // ユニット0にダメージ30を適用
-      await triggerEffect(0, 'flame', 0) // ユニット0にダメージ50を適用
-      await triggerEffect(0, 'heal', 20) // ユニット0にヒール20を適用
-      await triggerEffect(0, 'left', 0) // 値が0なので数値は表示されない
-      await triggerEffect(0, 'right', 0) // 同上
-      await triggerEffect(0, 'blink', -30) // 同上
+      await triggerEffect(0, 'fire', 0)
+      await triggerEffect(0, 'flame', 0)
+      await triggerEffect(0, 'heal', 20)
+      await triggerEffect(0, 'left', 0)
+      await triggerEffect(0, 'right', 0)
+      await triggerEffect(0, 'blink', -30)
     }
     runEffects()
   }, [])

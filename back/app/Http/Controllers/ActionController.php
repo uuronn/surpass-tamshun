@@ -31,6 +31,9 @@ class ActionController extends Controller
             return response()->json(['room' => $room, 'status' => 204]);
         }
 
+
+
+
 //        $hostUser = User::find($room->host_user_id);
 //        $joinUser = User::find($room->join_user_id);
 
@@ -39,5 +42,40 @@ class ActionController extends Controller
 //        $joinUser->save();
 //
 //        return response()->json(['joinUser' => $joinUser, 'status' => 200]);
+    }
+    public function heal(Request $request)
+    {
+        $room = Room::find($request->room_id);
+
+        if ($room->host_user_id === $request->user_id) {
+//          ホスト側の回復
+
+            $minHeal = 1;
+            $maxHeal = $room->host_user_guard_power;;
+            // Generate a random heal power
+            $healPower = random_int($minHeal, $maxHeal);
+
+//            $healPower = $room->host_user_guard_power;
+            $room->host_user_hit_point += $healPower;
+
+            $room->currentTurnUser = $room->join_user_id;
+            $room->save();
+
+            return response()->json(['room' => $room, 'status' => 204]);
+        } else if ($room->join_user_id === $request->user_id) {
+//          参加者の方の回復
+            $minHeal = 1;
+            $maxHeal = $room->host_user_guard_power;;
+            // Generate a random heal power
+            $healPower = random_int($minHeal, $maxHeal);
+
+//            $healPower = $room->join_user_guard_power;
+            $room->join_user_hit_point += $healPower;
+            $room->currentTurnUser = $room->host_user_id;
+
+            $room->save();
+
+            return response()->json(['room' => $room, 'status' => 204]);
+        }
     }
 }

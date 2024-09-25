@@ -36,16 +36,20 @@ class Room extends Model
     protected $fillable = [
         'id',
         'host_user_id',
+        'host_user_hit_point',
         'host_user_attack_power',
         'host_user_guard_power',
-        'host_user_hit_point',
+        'host_user_speed_power',
         'host_user_skills',
 
         'join_user_id',
+        'join_user_hit_point',
         'join_user_attack_power',
         'join_user_guard_power',
-        'join_user_hit_point',
+        'join_user_speed_power',
+        'join_user_skills',
 
+        'is_connect',
         'is_battle_finish'
     ];
 

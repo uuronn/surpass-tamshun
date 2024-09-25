@@ -15,11 +15,12 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->string('name');
             $table->string('email')->unique();
-            $table->integer('attack_power')->default(5);
-//            $table->integer('max_attack_power')->default(10);
-            $table->integer('guard_power')->default(3);
-//            $table->integer('max_guard_power')->default(10);
             $table->integer('hit_point')->default(100);
+            $table->integer('attack_power')->default(5);
+            $table->integer('guard_power')->default(3);
+            $table->integer('speed_power')->default(10);
+//            $table->integer('max_attack_power')->default(10);
+//            $table->integer('max_guard_power')->default(10);
 //            $table->integer('level')->default(1);
             $table->integer('total_xp')->default(0);
             $table->json("hot_words")->nullable();

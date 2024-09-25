@@ -26,12 +26,19 @@ class RoomController extends Controller
 
         $user = User::find($request->host_user_id);
 
+        $existingRoom = Room::where('host_user_id', $user->id)->first();
+
+        if ($existingRoom) {
+            return response()->json(['error' => '既に部屋が存在します'] );
+        }
+
         $room = Room::create([
                 'id' => Str::uuid()->toString(),
                 'host_user_id' => $user->id,
                 'host_user_attack_power' => $user->attack_power,
                 'host_user_guard_power' => $user->guard_power,
-                'host_user_hit_point' => $user->hit_point,
+                'host_user_speed_power' => $user->speed_power,
+                'host_user_hit_point' => $user->hit_point
             ]);
 
 
@@ -62,6 +69,7 @@ class RoomController extends Controller
             'join_user_attack_power' => $user->attack_power,
             'join_user_guard_power' => $user->guard_power,
             'join_user_hit_point' => $user->hit_point,
+            'join_user_speed_power' => $user->guard_power
         ]);
 
         // ユーザーをメールで検索
@@ -79,13 +87,44 @@ class RoomController extends Controller
     {
         $room = Room::find($request->room_id);
 
+        if (!$room->is_connect) {
+            return response()->json(['room' => $room, 'status' => "待機中です"]);
+        }
 
 //        var_dump("test");
 //
-        if (!$room->host_user_id) {
-            return response()->json(['error' => 'ホストがいません'] );
+        if (!$room->is_connect && $room->host_user_id && $room->join_user_id) {
+            $room->is_connect = true;
+
+
+            if($room->host_user_speed_power > $room->join_user_speed_power) {
+                $room->currentTurnUser = $room->host_user_id;
+            } else {
+                $room->currentTurnUser = $room->join_user_id;
+            }
+
+            $room->save();
+
+            return response()->json( "対戦開始" );
         }
 
+//        if(!$room->join_user_id) {
+//            return response()->json(['error' => '参加ユーザーがいません'] );
+//        }
+//
+//        if(!$room->join_user_id) {
+//            return response()->json(['error' => '参加ユーザーがいません'] );
+//        }
+
+
+
+        if ($room->is_connect) {
+            return response()->json(['room' => $room, 'status' => 201]);
+        }
+
+
+
+//        どちらかのユーザーのHPが0になったら終了
         if ($room->host_user_hit_point <= 0) {
             $room->is_battle_finish = true;
             $room->save();
@@ -106,5 +145,24 @@ class RoomController extends Controller
 
         return response()->json(['room' => $room,'status' => 201]);
     }
+
+    public function deleteRoom(Request $request)
+    {
+        $room = Room::find($request->room_id);
+
+        $room->delete();
+        $room->save();
+
+        return response()->json(['status' => 201]);
+    }
+
+    public function getListRoom()
+    {
+        $room = Room::all();
+
+
+        return response()->json(['roomList'=> $room,'status' => 201]);
+    }
+
 
 }

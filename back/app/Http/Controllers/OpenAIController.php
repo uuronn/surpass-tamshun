@@ -116,7 +116,8 @@ class OpenAIController extends Controller
 1. 元気を与える度合い
 2. 攻撃力（言葉の強さや影響力）
 3. 防御力（ネガティブな影響から守る力）
-4. 体力（言葉の持続力や安定性）
+4. 素早さ（立ち直る速さ）
+5. 体力（言葉の持続力や安定性）
 
 各項目について厳しく判定してください。判定できない場合は最低点数（0点）を出力してください。
 
@@ -127,6 +128,7 @@ class OpenAIController extends Controller
   "heat_power": 数値,
   "attack_power": 数値,
   "guard_power": 数値,
+  "speed_power": 数値,
   "hit_point": 数値
 }'
                         ],
@@ -168,9 +170,45 @@ class OpenAIController extends Controller
             $user->hot_words = $hotWords;
             $user->attack_power += $scores['attack_power'];
             $user->guard_power += $scores['guard_power'];
+            $user->speed_power += $scores['speed_power'];
             $user->hit_point += $scores['hit_point'];
 
             $user->total_xp = $user->attack_power + $user->guard_power + $user->hit_point;
+//            var_dump($generatedText->json());
+//            $resultScore = preg_replace('/\D/', '', $generatedText);
+
+                    // hot_words に prompt を追加
+                    // hot_words が null の場合は空配列として扱う
+                    $hotWords = $user->hot_words ?? [];
+
+//            var_dump($hotWords);
+                    $hotWords[] = $prompt;
+                    $user->hot_words = $hotWords;
+                    $user->attack_power += $scores['attack_power'];
+                    $user->guard_power += $scores['guard_power'];
+                    $user->speed_power += $scores['speed_power'];
+                    $user->hit_point += $scores['hit_point'];
+
+                    $user->total_xp = $user->attack_power + $user->guard_power + $user->hit_point;
+
+                    $user->last_training_time = now();
+
+
+                    $user->save();
+
+
+
+                    return response()->json([
+                        'success' => true,
+                        'result' => [
+                            'attackPower' => $user->attack_power,
+                            'guardPower' => $user->guard_power,
+                            'hitPoint' => $user->hit_point,
+                            'speedPower' => $user->speed_power,
+                            'totalXp' => $user->total_xp,
+                            'lastTrainingTime' => $user->last_training_time
+                        ],
+                    ]);
 
             $user->last_training_time = now();
 
@@ -185,6 +223,7 @@ class OpenAIController extends Controller
                     'attackPower' => $user->attack_power,
                     'guardPower' => $user->guard_power,
                     'hitPoint' => $user->hit_point,
+                    'speedPower' => $user->speed_power,
                     'totalXp' => $user->total_xp,
                     'lastTrainingTime' => $user->last_training_time
                 ],

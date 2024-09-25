@@ -16,6 +16,7 @@ class ActionController extends Controller
             $damage = $room->host_user_attack_power;
             $room->join_user_hit_point -= $damage;
 
+            $room->currentTurnUser = $room->join_user_id;
             $room->save();
 
             return response()->json(['room' => $room, 'status' => 204]);
@@ -23,6 +24,7 @@ class ActionController extends Controller
 //          参加者の方の攻撃
             $damage = $room->join_user_attack_power;
             $room->host_user_hit_point -= $damage;
+            $room->currentTurnUser = $room->host_user_id;
 
             $room->save();
 

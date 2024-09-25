@@ -149,10 +149,11 @@ function SignUp(isLoading: boolean) {
     const data = await res.json() // レスポンスのボディをテキストとして読み取る
     const userId = data.user.id
 
+    router.push(`/${userId}`)
+
     localStorage.setItem('userId', userId)
     const userdata = await getUser(userId)
     setUser(userdata)
-    router.push(`/${userId}`)
   }
 
   return (

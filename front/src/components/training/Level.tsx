@@ -1,21 +1,10 @@
 import React from 'react'
 
 // 定数として引数を定義
-const HP_LABEL = 'HP'
 const HP_VALUE = 120
-const HP_COLOR = 'pink'
-
-const ATTACK_LABEL = '攻撃'
 const ATTACK_VALUE = 120
-const ATTACK_COLOR = 'red'
-
-const DEFENSE_LABEL = '防御'
 const DEFENSE_VALUE = 120
-const DEFENSE_COLOR = 'blue'
-
-const SPEED_LABEL = '速さ'
 const SPEED_VALUE = 120
-const SPEED_COLOR = 'green'
 
 interface StatusBarProps {
   label: string
@@ -43,15 +32,21 @@ function StatusBar({ label, value, bgColor }: StatusBarProps) {
   )
 }
 
-export default function Level() {
+interface LevelProps {
+  level: number
+  hpValue: number
+  attackValue: number
+  guardValue: number
+  speedValue: number
+}
+
+export default function Level({ level, hpValue, attackValue, guardValue, speedValue }: LevelProps) {
   return (
     <div
       style={{
         width: '300px',
         margin: '0 auto',
-        // backgroundColor: 'white',
         borderRadius: '15px',
-        // overflow: 'hidden',
         boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
         textAlign: 'center',
         position: 'relative',
@@ -75,15 +70,15 @@ export default function Level() {
           fontWeight: 'bold',
         }}
       >
-        Lv 15
+        Lv {level}
       </div>
 
       <div style={{ padding: '40px 20px' }}>
         {/* 定数を使ってStatusBarを呼び出す */}
-        <StatusBar label={HP_LABEL} value={HP_VALUE} bgColor={HP_COLOR} />
-        <StatusBar label={ATTACK_LABEL} value={ATTACK_VALUE} bgColor={ATTACK_COLOR} />
-        <StatusBar label={DEFENSE_LABEL} value={DEFENSE_VALUE} bgColor={DEFENSE_COLOR} />
-        <StatusBar label={SPEED_LABEL} value={SPEED_VALUE} bgColor={SPEED_COLOR} />
+        <StatusBar label="HP" value={hpValue} bgColor="pink" />
+        <StatusBar label="攻撃" value={attackValue} bgColor="red" />
+        <StatusBar label="防御" value={guardValue} bgColor="blue" />
+        <StatusBar label="速さ" value={speedValue} bgColor="green" />
       </div>
     </div>
   )

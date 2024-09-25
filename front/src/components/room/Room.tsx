@@ -23,7 +23,34 @@ const characters = [
     comment: 'あきらめるなーーー！！',
     imageUrl: '/shuzohonki.png',
   },
-  // 他のキャラクターを追加
+  {
+    id: 4,
+    name: '松岡修造',
+    level: 100,
+    comment: 'あきらめるなーーー！！',
+    imageUrl: '/shuzohonki.png',
+  },
+  {
+    id: 5,
+    name: '松岡修造',
+    level: 100,
+    comment: 'あきらめるなーーー！！',
+    imageUrl: '/shuzohonki.png',
+  },
+  {
+    id: 6,
+    name: '松岡修造',
+    level: 100,
+    comment: 'あきらめるなーーー！！',
+    imageUrl: '/shuzohonki.png',
+  },
+  {
+    id: 7,
+    name: '松岡修造',
+    level: 100,
+    comment: 'あきらめるなーーー！！',
+    imageUrl: '/shuzohonki.png',
+  },
 ]
 
 const StatusBar = ({
@@ -36,145 +63,149 @@ const StatusBar = ({
   bgColor: string
 }) => {
   return (
-    <div className="statusBar" style={{ backgroundColor: bgColor }}>
+    <div
+      style={{
+        backgroundColor: bgColor,
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        padding: '5px 10px',
+        borderRadius: '10px',
+        marginBottom: '10px',
+        color: 'white',
+      }}
+    >
       <span>{label}</span>
-      <span className="statusValue">{value}</span>
-      <style jsx>{`
-        .statusBar {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          padding: 5px 10px;
-          border-radius: 10px;
-          margin-bottom: 10px;
-          color: white;
-        }
-        .statusValue {
-          font-size: 18px;
-          font-weight: bold;
-        }
-      `}</style>
+      <span style={{ fontSize: '18px', fontWeight: 'bold' }}>{value}</span>
     </div>
   )
 }
 
 export default function Room() {
   return (
-    <div className="container">
-      <RoomCreationButton />
+    <div
+      style={{
+        // height: '100vh',
+        width: '100vw',
+        display: 'flex',
+        flexDirection: 'column',
+        position: 'relative',
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}
+    >
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'center',
+          width: '100%',
+        }}
+      >
+        <TextInput />
+        <RoomCreationButton />
+      </div>
 
-      {/* 水平スクロールコンテナ */}
-      <div className="scrollContainer">
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          overflowX: 'scroll',
+          padding: '20px',
+          height: '60vh',
+          width: '70%',
+        }}
+      >
         {characters.map((char) => (
           <CharacterCard key={char.id} character={char} />
         ))}
       </div>
-
-      <style jsx>{`
-        .container {
-          width: 70%;
-          height: 100vh;
-          background-image: url('/background.jpg');
-          background-size: cover;
-          background-position: center;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          position: relative;
-        }
-        .scrollContainer {
-          display: flex;
-          overflow-x: scroll;
-          padding: 20px;
-          width: 100%;
-        }
-      `}</style>
     </div>
   )
 }
 
 const RoomCreationButton = () => {
   return (
-    <button className="createRoomButton">
-      <Image src="/gakkouuranikoi.png" alt="Create Room" width={100} height={100} />
-      <style jsx>{`
-        .createRoomButton {
-          position: absolute;
-          top: 20px;
-          right: 20px;
-          background: none;
-          border: none;
-          cursor: pointer;
-        }
-      `}</style>
+    <button
+      style={{
+        background: 'none',
+        border: 'none',
+        cursor: 'grab',
+      }}
+    >
+      <Image src="/gakkouuranikoi.png" alt="Create Room" width={80} height={80} />
     </button>
   )
 }
 
 const CharacterCard = ({ character }: { character: (typeof characters)[0] }) => {
   return (
-    <div className="card">
+    <div
+      style={{
+        backgroundColor: 'rgba(255, 255, 255, 0.8)',
+        borderRadius: '10px',
+        margin: '10px',
+        padding: '20px',
+        width: '220px',
+        flexShrink: 0,
+        textAlign: 'center',
+        position: 'relative',
+        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+      }}
+    >
       <LevelBadge level={character.level} />
       <Image
         src={character.imageUrl}
         alt={character.name}
         width={100}
         height={100}
-        className="avatar"
+        style={{ borderRadius: '50%' }}
       />
-      <h3>{character.name}</h3>
-      <p>{character.comment}</p>
+      <h3 style={{ margin: '10px 0', fontSize: '20px' }}>{character.name}</h3>
+      <p style={{ fontSize: '14px', color: '#666' }}>{character.comment}</p>
       <div style={{ padding: '20px 0' }}>
         <StatusBar label="HP" value={100} bgColor="pink" />
         <StatusBar label="攻撃" value={80} bgColor="red" />
         <StatusBar label="防御" value={90} bgColor="blue" />
       </div>
-
-      <style jsx>{`
-        .card {
-          background-color: rgba(255, 255, 255, 0.8);
-          border-radius: 10px;
-          margin: 10px;
-          padding: 20px;
-          width: 220px;
-          flex-shrink: 0;
-          text-align: center;
-          position: relative;
-          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-        .avatar {
-          border-radius: 50%;
-        }
-        h3 {
-          margin: 10px 0;
-          font-size: 20px;
-        }
-        p {
-          font-size: 14px;
-          color: #666;
-        }
-      `}</style>
     </div>
   )
 }
 
 const LevelBadge = ({ level }: { level: number }) => {
   return (
-    <div className="levelBadge">
+    <div
+      style={{
+        backgroundColor: 'gray',
+        color: 'white',
+        borderRadius: '25px',
+        padding: '5px 20px',
+        position: 'absolute',
+        top: '-20px',
+        left: '50%',
+        transform: 'translateX(-50%)',
+        fontWeight: 'bold',
+      }}
+    >
       Lv {level}
-      <style jsx>{`
-        .levelBadge {
-          background-color: gray;
-          color: white;
-          border-radius: 25px;
-          padding: 5px 20px;
-          position: absolute;
-          top: -20px;
-          left: 50%;
-          transform: translateX(-50%);
-          font-weight: bold;
-        }
-      `}</style>
     </div>
+  )
+}
+
+const TextInput = () => {
+  return (
+    <textarea
+      placeholder="Enter text here..."
+      style={{
+        width: '50%',
+        height: '10vh',
+        padding: '1rem',
+        borderRadius: '0.5rem',
+        border: '0.2rem solid #ccc',
+        fontSize: '1rem',
+        boxShadow: '0 0.5rem 1rem rgba(0, 0, 0, 0.1)',
+      }}
+    />
   )
 }

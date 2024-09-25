@@ -25,7 +25,7 @@ Route::post('/getRoom', [RoomController::class, 'getRoom'])->withoutMiddleware([
 
 Route::get('/getListRoom', [RoomController::class, 'getListRoom'])->withoutMiddleware([VerifyCsrfToken::class]);
 
-Route::post('/deleteRoom', [RoomController::class, 'deleteRoom'])->withoutMiddleware([VerifyCsrfToken::class]);
+Route::delete('/deleteRoom', [RoomController::class, 'deleteRoom'])->withoutMiddleware([VerifyCsrfToken::class]);
 
 Route::post('/action', [ActionController::class, 'attack'])->withoutMiddleware([VerifyCsrfToken::class]);
 

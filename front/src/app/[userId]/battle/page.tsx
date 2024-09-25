@@ -223,13 +223,13 @@ export default function Battle() {
         }}
       >
         {loading ? (
-          <Log log={['通信中...']} />
+          <Log log={['通信中.....']} />
         ) : logging ? (
           <Log log={log} />
         ) : turn ? (
           <BattleButtons onAttack={onAttack} />
         ) : (
-          <Log log={['相手のターン']} />
+          <Log log={['相手のターン.....']} />
         )}
       </div>
     </div>

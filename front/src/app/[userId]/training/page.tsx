@@ -6,11 +6,11 @@ import TrainingSkills from '@/components/training/TrainingSkills'
 import { Button } from '@/components/ui/button'
 import { useUserContext } from '@/context/UserContext'
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { ReactNode, useState } from 'react'
 
 export default function Home() {
   const [message, setMessage] = useState<string>('')
-  const [reply, setReply] = useState<string>('')
+  const [reply, setReply] = useState<ReactNode>()
   const [loading, setLoading] = useState<boolean>(false)
   const [levelValue, setLevelValue] = useState<number>(0)
   const [attackValue, setAttackValue] = useState<number>(0)
@@ -20,6 +20,19 @@ export default function Home() {
 
   const { user } = useUserContext()
   const router = useRouter()
+
+  const editReply = (data: any): JSX.Element => {
+    return (
+      <div>
+        <p>HP: {data.hitPoint}</p>
+        <p>攻撃: {data.attackPower}</p>
+        <p>防御: {data.guardPower}</p>
+        <p>速さ: {data.speedPower}</p>
+        <p> レベル: {data.totalXp}</p>
+        <p>最後のトレーニング時間: {new Date(data.lastTrainingTime).toLocaleString()}</p>
+      </div>
+    )
+  }
 
   const handleSubmit = async () => {
     if (message === '') {
@@ -38,20 +51,15 @@ export default function Home() {
 
       const data = await res.json()
 
+      console.log(data)
+
       if (res.ok) {
-        setReply(`
-          Attack Power: ${data.result.attackPower}
-          Guard Power: ${data.result.guardPower}
-          Hit Point: ${data.result.hitPoint}
-          Speed: ${data.result.speed}
-          Total XP: ${data.result.totalXp}
-          Last Training Time: ${new Date(data.result.lastTrainingTime).toLocaleString()}
-        `)
+        setReply(editReply(data.result))
         setLevelValue(data.result.totalXp)
         setAttackValue(data.result.attackPower)
         setGuardValue(data.result.guardPower)
         sethpValue(data.result.hitPoint)
-        setSpeedValue(data.result.speed)
+        setSpeedValue(data.result.speedPower)
       } else {
         setReply('Failed to retrieve training data.')
       }

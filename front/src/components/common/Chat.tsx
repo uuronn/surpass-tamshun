@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, ReactNode } from 'react'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import Speech from './Speech'
@@ -8,7 +8,7 @@ import FloatingImg from './FloatingImg'
 type chatProps = {
   message: string
   setMessage: (message: string) => void
-  reply: string
+  reply: ReactNode
   handleSubmit: () => void
   loading: boolean
 }

@@ -1,11 +1,5 @@
 import React from 'react'
 
-// 定数として引数を定義
-const HP_VALUE = 120
-const ATTACK_VALUE = 120
-const DEFENSE_VALUE = 120
-const SPEED_VALUE = 120
-
 interface StatusBarProps {
   label: string
   value: number

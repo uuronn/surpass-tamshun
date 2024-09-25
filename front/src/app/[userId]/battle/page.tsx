@@ -5,9 +5,10 @@ import BattleButtons from '@/components/battle/BattleButtons'
 import Unit, { UnitRef } from '@/components/battle/Unit'
 import Log from '@/components/battle/Log'
 import HealthBar from '@/components/battle/HealthBar'
+import Status from '@/components/battle/Status'
 
 export default function Battle() {
-  const [selecting, setSelecting] = useState<boolean>(false)
+  const [selecting, setSelecting] = useState<boolean>(true)
   const [loading, setLoading] = useState<boolean>(false)
 
   const log = ['Player1がゲームに参加しました。', 'Player1がゲームに参加しました。']
@@ -26,7 +27,7 @@ export default function Battle() {
       await triggerEffect(0, 'heal', 20) // ユニット0にヒール20を適用
       await triggerEffect(0, 'left', 0) // 値が0なので数値は表示されない
       await triggerEffect(0, 'right', 0) // 同上
-      await triggerEffect(0, 'blink', 30) // 同上
+      await triggerEffect(0, 'blink', -30) // 同上
     }
     runEffects()
   }, [])
@@ -49,17 +50,21 @@ export default function Battle() {
           height: '70%',
           width: '100%',
           display: 'flex',
-          justifyContent: 'space-around',
+          justifyContent: 'center',
           alignItems: 'end',
           paddingBottom: '20px',
         }}
       >
-        {unitRefs.map((unitRef, index) => (
-          <div key={index} className="flex flex-col items-center gap-10">
-            <HealthBar currentHP={50} maxHP={100} />
-            <Unit ref={unitRef} />
-          </div>
-        ))}
+        <Status name="ああああ" attack={20} defense={20} speed={20} xp={60} />
+        <div className="flex flex-col items-center gap-10">
+          <HealthBar currentHP={50} maxHP={100} />
+          <Unit ref={unitRefs[0]} />
+        </div>
+        <div className="flex flex-col items-center gap-10">
+          <HealthBar currentHP={50} maxHP={100} />
+          <Unit ref={unitRefs[1]} />
+        </div>
+        <Status name="ああああああああああああ" attack={20} defense={20} speed={20} xp={1000} />
       </div>
       <div
         style={{

@@ -6,6 +6,7 @@ export type Room = {
   hostGuard: number | null
   hostSpeed: number | null
   hostHp: number | null
+  hostMaxHp: number | null
   hostXp: number | null
   joinUserId: string | null
   joinName: string | null
@@ -13,6 +14,7 @@ export type Room = {
   joinGuard: number | null
   joinSpeed: number | null
   joinHp: number | null
+  joinMaxHp: number | null
   joinXp: number | null
   isConnected: boolean
   isFinished: boolean

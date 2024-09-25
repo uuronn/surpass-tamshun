@@ -7,10 +7,11 @@ import { createContext, useState, useContext, useEffect, ReactNode } from 'react
 import { useUserContext } from './UserContext'
 import Matched from '@/components/room/Matched'
 import xpToLevel from '@/lib/xpToLevel'
+import { User } from '@/type/user'
 
 const RoomContext = createContext<{
   currentRoom: Room | null | undefined
-  getCurrentRoom: () => void
+  getCurrentRoom:() => void
   createRoom: () => void
   joinRoom: (roomId: string) => void
 }>({
@@ -26,10 +27,21 @@ export function useRoomContext() {
 
 export function RoomProvider({ children }: { children: ReactNode }) {
   const [currentRoom, setCurrentRoom] = useState<Room | null | undefined>(undefined)
+  const [hostUserInfo, setHostUserInfo] = useState<User | null | undefined>(undefined)
+  const [joinUserInfo, setJoinUserInfo] = useState<User | null | undefined>(undefined)
 
   const { user, getUser } = useUserContext()
 
   const router = useRouter()
+
+  const loadUserInfo = async () => {
+    if (currentRoom?.hostUserId) {
+      const hostUser = await getUser(currentRoom?.hostUserId)
+    }
+    if (currentRoom?.joinUserId) {
+      const joinUser = await getUser(currentRoom?.joinUserId)
+    }
+  }
 
   // ゲームが終了するまで取得し続ける
   const getCurrentRoom = async (): Promise<void> => {
@@ -45,27 +57,25 @@ export function RoomProvider({ children }: { children: ReactNode }) {
     const data = await res.json()
     const roomData = data.room
 
-    let joinUserName = currentRoom?.joinName || null
-
-    if (currentRoom?.joinUserId !== null && currentRoom?.joinName == null) {
-      joinUserName = (await getUser(roomData.join_user_id)).name
-    }
+    await loadUserInfo()
     setCurrentRoom({
       roomId: roomData.id,
       hostUserId: roomData.host_user_id,
-      hostName: user?.name || '名無しの修造',
+      hostName: hostUserInfo?.name || currentRoom?.hostName || '修造1',
       hostAttack: roomData.host_user_attack_power,
       hostGuard: roomData.host_user_guard_power,
       hostSpeed: roomData.host_user_speed_power,
       hostHp: roomData.host_user_hit_point,
-      hostXp: roomData.host_xp,
+      hostMaxHp: hostUserInfo?.hp || 100,
+      hostXp: hostUserInfo?.xp || currentRoom?.hostXp || roomData.host_xp,
       joinUserId: roomData.join_user_id,
-      joinName: '相手の名前',
+      joinName: joinUserInfo?.name || currentRoom?.joinName || '修造２',
       joinAttack: roomData.join_user_attack_power,
       joinGuard: roomData.join_user_guard_power,
       joinSpeed: roomData.join_user_speed_power,
       joinHp: roomData.join_user_hit_point,
-      joinXp: roomData.join_xp,
+      joinMaxHp: joinUserInfo?.hp || 100,
+      joinXp: joinUserInfo?.xp || currentRoom?.joinXp || roomData.join_xp,
       isConnected: roomData.is_connect,
       isFinished: roomData.is_battle_finish,
     })
@@ -82,7 +92,6 @@ export function RoomProvider({ children }: { children: ReactNode }) {
       }),
     })
     const data = await res.json()
-    console.log(data)
     const roomId = data.room.room_id
     const userId = user?.userId
     if (!userId) {
@@ -92,11 +101,12 @@ export function RoomProvider({ children }: { children: ReactNode }) {
       roomId: roomId,
       hostUserId: user?.userId,
       hostName: user?.name,
-      hostAttack: 20,
-      hostGuard: 10,
-      hostSpeed: 10,
-      hostHp: 100,
-      hostXp: 200,
+      hostAttack: user?.attack,
+      hostGuard: user?.guard,
+      hostSpeed: user?.speed,
+      hostHp: user?.hp,
+      hostMaxHp: user?.hp,
+      hostXp: user?.xp,
       joinUserId: null,
       joinName: null,
       joinAttack: null,
@@ -104,6 +114,7 @@ export function RoomProvider({ children }: { children: ReactNode }) {
       joinSpeed: null,
       joinHp: null,
       joinXp: null,
+      joinMaxHp: null,
       isConnected: false,
       isFinished: false,
     }
@@ -122,15 +133,13 @@ export function RoomProvider({ children }: { children: ReactNode }) {
       }),
     })
     const data = await res.json()
-    console.log(data)
   }
 
   useEffect(() => {
-    console.log('currentRoom:', currentRoom)
     if (currentRoom) {
       const intervalId = setInterval(() => {
         getCurrentRoom()
-      }, 3000)
+      }, 2000)
 
       return () => clearInterval(intervalId)
     }

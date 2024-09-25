@@ -40,7 +40,7 @@ export function UserProvider({ children }: { children: ReactNode }) {
     const hp = data.user.hp
     const hotWords = data.user.hotWords
     const lastTraining = new Date(data.user.lastTraining)
-    const xp = data.user.xp
+    const xp = data.user.total_xp
     return { userId, name, email, attack, guard, hp, hotWords, lastTraining, xp } as User
   }
 

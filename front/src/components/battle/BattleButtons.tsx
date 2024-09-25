@@ -6,7 +6,13 @@ import { Button } from '../ui/button'
 
 type ButtonType = '攻撃' | '防御' | 'わざ'
 
-export default function BattleButtons() {
+type BattleButtonsProps = {
+  onAttack: () => void
+  // onGuard: () => void
+  // onSpecial: () => void
+}
+
+export default function BattleButtons({ onAttack }: BattleButtonsProps) {
   const [selectedButton, setSelectedButton] = useState<ButtonType | null>(null)
 
   const buttons: { type: ButtonType; icon: React.ReactNode; color: string }[] = [
@@ -17,7 +23,9 @@ export default function BattleButtons() {
 
   const handleClick = (type: ButtonType) => {
     setSelectedButton(type)
-    setTimeout(() => setSelectedButton(null), 300)
+    if (type === '攻撃') {
+      onAttack()
+    }
   }
 
   return (

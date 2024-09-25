@@ -2,13 +2,18 @@ import React from 'react'
 import Image from 'next/image'
 
 type RoomProps = {
-  name: string
-  level: number
-  url: string
-  comment: string
+  roomID: string
+  roomName: string
+  roomLevel: number
+  roomUrl: string
+  roomComment: string
 }
 
-export default function RoomCard({ name, level, url, comment }: RoomProps) {
+export default function RoomCard({ roomID, roomName, roomLevel, roomUrl, roomComment }: RoomProps) {
+  const handleClick = () => {
+    console.log(`Room ID: ${roomID}`)
+  }
+
   return (
     <div
       className="transition-transform duration-300 hover:scale-105"
@@ -26,12 +31,14 @@ export default function RoomCard({ name, level, url, comment }: RoomProps) {
         alignItems: 'center',
         boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
         transition: 'transform 0.3s',
+        cursor: 'pointer',
       }}
+      onClick={handleClick}
     >
-      <LevelBadge level={level} />
-      <Image src={url} alt="" width={100} height={100} style={{ margin: 10 }} />
-      <h3 style={{ margin: '10px 0', fontSize: '20px' }}>{name}</h3>
-      <p style={{ fontSize: '14px', color: '#666' }}>{comment}</p>
+      <LevelBadge level={roomLevel} />
+      <Image src={roomUrl} alt="" width={100} height={100} style={{ margin: 10 }} />
+      <h3 style={{ margin: '10px 0', fontSize: '20px' }}>{roomName}</h3>
+      <p style={{ fontSize: '14px', color: '#666' }}>{roomComment}</p>
       <div style={{ padding: '20px 0' }}></div>
     </div>
   )

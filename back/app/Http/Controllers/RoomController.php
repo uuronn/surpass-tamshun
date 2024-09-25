@@ -35,10 +35,13 @@ class RoomController extends Controller
         $room = Room::create([
                 'id' => Str::uuid()->toString(),
                 'host_user_id' => $user->id,
+                'host_user_name' => $user->name,
                 'host_user_attack_power' => $user->attack_power,
                 'host_user_guard_power' => $user->guard_power,
                 'host_user_speed_power' => $user->speed_power,
-                'host_user_hit_point' => $user->hit_point
+                'host_user_max_hit_point' => $user->hit_point,
+                'host_user_hit_point' => $user->hit_point,
+                'host_user_xp' => $user->total_xp
             ]);
 
 
@@ -66,10 +69,13 @@ class RoomController extends Controller
 
         $room->update([
             'join_user_id' => $user->id,
+            'join_user_name' => $user->name,
             'join_user_attack_power' => $user->attack_power,
             'join_user_guard_power' => $user->guard_power,
+            'join_user_max_hit_point' => $user->hit_point,
             'join_user_hit_point' => $user->hit_point,
-            'join_user_speed_power' => $user->speed_power
+            'join_user_speed_power' => $user->speed_power,
+            'join_user_xp' => $user->total_xp,
         ]);
 
         // ユーザーをメールで検索
@@ -163,6 +169,28 @@ class RoomController extends Controller
 
         return response()->json(['roomList'=> $room,'status' => 201]);
     }
+
+
+    public function deleteJoinUserRoom(Request $request)
+    {
+        $room = Room::find($request->room_id);
+
+        $room->update([
+            'join_user_id' => "",
+            'join_user_name' => "",
+            'join_user_attack_power' => 0,
+            'join_user_guard_power' => 0,
+            'join_user_max_hit_point' => 0,
+            'join_user_hit_point' => 0,
+            'join_user_speed_power' => 0,
+            'join_user_xp' => 0
+        ]);
+
+        $room->save();
+
+        return response()->json(['status' => 201]);
+    }
+
 
 
 }

@@ -1,9 +1,10 @@
 'use client'
 
 import { motion, AnimatePresence } from 'framer-motion'
+import { ReactNode } from 'react'
 
 interface SpeechBubbleProps {
-  text: string
+  text: ReactNode
   isVisible: boolean
   direction?: 'left' | 'right' | 'up'
   loading?: boolean
@@ -59,7 +60,7 @@ export default function Speech({
                 />
               </div>
             ) : (
-              <p className="break-words">{text}</p>
+              <div className="break-words">{text}</div>
             )}
             {(direction === 'left' || direction === 'right') && (
               <div

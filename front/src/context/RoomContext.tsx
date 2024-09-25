@@ -32,7 +32,7 @@ export function RoomProvider({ children }: { children: ReactNode }) {
   const [prevRoom, setPrevRoom] = useState<Room | null | undefined>(undefined)
   const [currentRoom, setCurrentRoom] = useState<Room | null | undefined>(undefined)
 
-  const { user, getUser } = useUserContext()
+  const { user } = useUserContext()
 
   const router = useRouter()
 
@@ -52,29 +52,25 @@ export function RoomProvider({ children }: { children: ReactNode }) {
     const data = await res.json()
     const roomData = data.room
 
-    // ユーザー情報を取得
-    const hostUserInfo = await getUser(roomData.host_user_id)
-    const joinUserInfo = roomData.join_user_id ? await getUser(roomData.join_user_id) : null
-
     // 新しい部屋情報を作成
     const newRoom: Room = {
       roomId: roomData.id,
       hostUserId: roomData.host_user_id,
-      hostName: 'ホスト',
+      hostName: roomData.host_user_name,
       hostAttack: roomData.host_user_attack_power,
       hostGuard: roomData.host_user_guard_power,
       hostSpeed: roomData.host_user_speed_power,
       hostHp: roomData.host_user_hit_point,
-      hostMaxHp: 100,
-      hostXp: 300,
+      hostMaxHp: roomData.host_user_max_hit_point,
+      hostXp: roomData.host_user_xp,
       joinUserId: roomData.join_user_id,
-      joinName: 'ゲスト',
+      joinName: roomData.join_user_name,
       joinAttack: roomData.join_user_attack_power,
       joinGuard: roomData.join_user_guard_power,
       joinSpeed: roomData.join_user_speed_power,
       joinHp: roomData.join_user_hit_point,
-      joinMaxHp: 100,
-      joinXp: 300,
+      joinMaxHp: roomData.join_user_max_hit_point,
+      joinXp: roomData.join_user_xp,
       turn: roomData?.currentTurnUser,
       isConnected: roomData.is_connect,
       isFinished: roomData.is_battle_finish,
@@ -104,6 +100,7 @@ export function RoomProvider({ children }: { children: ReactNode }) {
       }),
     })
     const data = await res.json()
+    console.log(data)
     const roomId = data.room.id
     const userId = user?.userId
     if (!userId) {
@@ -277,7 +274,7 @@ export function RoomProvider({ children }: { children: ReactNode }) {
             imageUrl: '/shuzohonki.png',
           }}
         />
-      ) : !isHost && !connected ? (
+      ) : !isHost && !connected && !!currentRoom ? (
         <Loading message="相手の承認を待っています..." />
       ) : (
         children

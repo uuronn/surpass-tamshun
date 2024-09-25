@@ -49,6 +49,8 @@ class Room extends Model
         'join_user_speed_power',
         'join_user_skills',
 
+        'currentTurnUser',
+
         'is_connect',
         'is_battle_finish'
     ];

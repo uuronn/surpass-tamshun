@@ -1,5 +1,7 @@
 import React from 'react'
 import Image from 'next/image'
+import { useUserContext } from '@/context/UserContext'
+import { useRoomContext } from '@/context/RoomContext'
 
 type RoomProps = {
   roomID: string
@@ -10,9 +12,7 @@ type RoomProps = {
 }
 
 export default function RoomCard({ roomID, roomName, roomLevel, roomUrl, roomComment }: RoomProps) {
-  const handleClick = () => {
-    console.log(`Room ID: ${roomID}`)
-  }
+  const { joinRoom } = useRoomContext()
 
   return (
     <div
@@ -33,7 +33,7 @@ export default function RoomCard({ roomID, roomName, roomLevel, roomUrl, roomCom
         transition: 'transform 0.3s',
         cursor: 'pointer',
       }}
-      onClick={handleClick}
+      onClick={() => joinRoom(roomID)}
     >
       <LevelBadge level={roomLevel} />
       <Image src={roomUrl} alt="" width={100} height={100} style={{ margin: 10 }} />

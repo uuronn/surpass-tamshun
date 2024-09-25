@@ -65,10 +65,10 @@ function SignIn(isLoading: boolean) {
     })
     const data = await res.json()
     const userId = data.user.id
-    router.push(`/${userId}`)
     localStorage.setItem('userId', userId)
     const userdata = await getUser(userId)
     setUser(userdata)
+    router.push(`/${userId}`)
   }
 
   return (
@@ -121,6 +121,9 @@ function SignIn(isLoading: boolean) {
 
 function SignUp(isLoading: boolean) {
   const { setUser, getUser } = useUserContext()
+
+  const router = useRouter()
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
@@ -149,6 +152,7 @@ function SignUp(isLoading: boolean) {
     localStorage.setItem('userId', userId)
     const userdata = await getUser(userId)
     setUser(userdata)
+    router.push(`/${userId}`)
   }
 
   return (

@@ -62,14 +62,14 @@ class RoomController extends Controller
 
         $user = User::find($request->join_user_id);
 //        $user = User::find($request->host_user_id);
-        var_dump($room);
+//        var_dump($room);
 
         $room->update([
             'join_user_id' => $user->id,
             'join_user_attack_power' => $user->attack_power,
             'join_user_guard_power' => $user->guard_power,
             'join_user_hit_point' => $user->hit_point,
-            'join_user_speed_power' => $user->guard_power
+            'join_user_speed_power' => $user->speed_power
         ]);
 
         // ユーザーをメールで検索
@@ -87,9 +87,9 @@ class RoomController extends Controller
     {
         $room = Room::find($request->room_id);
 
-        if (!$room->is_connect) {
-            return response()->json(['room' => $room, 'status' => "待機中です"]);
-        }
+        // if (!$room->is_connect) {
+        //     return response()->json(['room' => $room, 'status' => "待機中です"]);
+        // }
 
 //        var_dump("test");
 //

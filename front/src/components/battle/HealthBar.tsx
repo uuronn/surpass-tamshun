@@ -19,9 +19,8 @@ export default function HealthBar({ currentHP, maxHP }: HealthBarProps) {
     const animateHP = () => {
       const elapsedTime = Date.now() - startTime
       const progress = Math.min(elapsedTime / animationDuration, 1)
-      const newHP = startHP + (currentHP - startHP) * progress
 
-      setDisplayHP(Math.round(newHP))
+      setDisplayHP(Math.max(0, Math.round(currentHP)))
 
       if (progress < 1) {
         requestAnimationFrame(animateHP)

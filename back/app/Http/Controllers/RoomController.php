@@ -111,7 +111,7 @@ class RoomController extends Controller
 
             $room->save();
 
-            return response()->json( "対戦開始" );
+            return response()->json(['room' => $room, 'status' => "対戦開始"]);
         }
 
 //        if(!$room->join_user_id) {

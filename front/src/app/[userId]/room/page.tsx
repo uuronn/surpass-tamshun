@@ -5,10 +5,15 @@ import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import { useRoomContext } from '@/context/RoomContext'
 import RoomCard from '@/components/room/RoomCard'
+import { useUserContext } from '@/context/UserContext'
+import { useRouter } from 'next/navigation'
 
 export default function Room() {
   const [comment, setComment] = useState<string>('')
-  const [characters, setCharacters] = useState<any[]>([])
+  const [rooms, setRooms] = useState<any[]>([])
+
+  const { user } = useUserContext()
+  const router = useRouter()
 
   // useEffectでルームリストを取得する
   useEffect(() => {
@@ -20,18 +25,44 @@ export default function Room() {
             'Content-Type': 'application/json',
           },
         })
+
         if (!res.ok) {
-          throw new Error('Failed to fetch room list')
+          console.error('Failed to fetch room list.')
+          return
         }
+
         const data = await res.json()
-        setCharacters(data.rooms) // 取得したデータをcharactersにセット
+
+        setRooms(data.roomList)
       } catch (error) {
         console.error('Error fetching room list:', error)
       }
     }
 
     fetchRoomList()
-  }, []) // コンポーネントの初期マウント時に一度だけ実行
+  }, [])
+
+  // リストを再読み込みする関数
+  const reloadRoomList = async () => {
+    try {
+      const res = await fetch('http://localhost/api/getListRoom', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+
+      if (!res.ok) {
+        console.error('Failed to reload room list.')
+        return
+      }
+
+      const data = await res.json()
+      setRooms(data.roomList)
+    } catch (error) {
+      console.error('Error reloading room list:', error)
+    }
+  }
 
   return (
     <div
@@ -48,6 +79,22 @@ export default function Room() {
       }}
     >
       <div
+        style={{
+          position: 'absolute',
+          left: '10px',
+          bottom: '10px',
+        }}
+      >
+        <Button
+          onClick={() => router.push(`/${user?.userId}`)}
+          type="submit"
+          className="w-48 h-16 m-3 rounded-3xl bg-gradient-to-r from-gray-500 to-gray-600 hover:from-gray-600 hover:to-gray-700 text-white font-bold py-3 px-6 text-2xl transition-all duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50 uppercase"
+          disabled={false}
+        >
+          戻る
+        </Button>
+      </div>
+      <div
         style={{ width: '50%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}
       >
         <input
@@ -58,6 +105,14 @@ export default function Room() {
           className="w-full min-h-[50px] p-4 pr-16 text-base text-gray-900 bg-white border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none transition-all duration-200 ease-in-out shadow-lg hover:shadow-2xl transition-shadow duration-300 ease-in-out"
         />
         <RoomCreationButton />
+        <Button
+          onClick={reloadRoomList}
+          type="submit"
+          className="w-13 h-13 m-3 rounded-2xl bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-bold py-3 px-6 text-2xl transition-all duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50 uppercase"
+          disabled={false}
+        >
+          更新
+        </Button>
       </div>
       <div className="w-full flex items-center justify-center">
         <div className="container">
@@ -72,13 +127,19 @@ export default function Room() {
               width: '100%',
             }}
           >
-            {characters.map((char) => (
+            {rooms.map((room) => (
               <RoomCard
-                key={char.id} // APIから取得したルームのidを使用
-                name={char.name} // APIから取得したルームの名前
-                level={char.level} // ルームのレベル
-                url={char.imageUrl} // ルームの画像URL
-                comment={char.comment} // ルームのコメント
+                key={room.id}
+                roomID={room.id}
+                roomName={room.host_user_id}
+                roomLevel={
+                  room.host_user_hit_point +
+                  room.host_user_attack_power +
+                  room.host_user_guard_power +
+                  room.host_user_speed_power
+                }
+                roomUrl="/battleshuzo.png"
+                roomComment={comment}
               />
             ))}
           </div>
@@ -91,9 +152,36 @@ export default function Room() {
 const RoomCreationButton = () => {
   const { createRoom } = useRoomContext()
 
+  // 新しいルームを作成し、APIにリクエストを送信する関数
+  const handleCreateRoom = async () => {
+    try {
+      // APIリクエストをPOSTで送信
+      const res = await fetch('http://localhost/api/room', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          host_user_id: window.localStorage.getItem('userId'),
+          // hostComment: window.localStorage.getItem('comment'),
+        }),
+      })
+
+      if (res.ok) {
+        const data = await res.json()
+        console.log('Room created successfully:', data)
+        createRoom() // ルーム作成の他の処理を実行
+      } else {
+        console.error('Failed to create room.')
+      }
+    } catch (error) {
+      console.error('Error creating room:', error)
+    }
+  }
+
   return (
     <Button
-      onClick={() => createRoom()}
+      onClick={handleCreateRoom} // ボタンがクリックされた時にAPIを呼び出す
       className="createRoomButton hover:scale-110 hover:shadow-lg transition-transform duration-300 ease-in-out"
     >
       <Image src="/createRoom.png" alt="Create Room" width={100} height={100} />

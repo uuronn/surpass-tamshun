@@ -21,6 +21,8 @@ Route::post('/room', [RoomController::class, 'createRoom'])->withoutMiddleware([
 
 Route::put('/joinRoom', [RoomController::class, 'joinRoom'])->withoutMiddleware([VerifyCsrfToken::class]);
 
+Route::put('/approvalJoinRoom', [RoomController::class, 'approvalJoinRoom'])->withoutMiddleware([VerifyCsrfToken::class]);
+
 Route::post('/getRoom', [RoomController::class, 'getRoom'])->withoutMiddleware([VerifyCsrfToken::class]);
 
 Route::get('/getListRoom', [RoomController::class, 'getListRoom'])->withoutMiddleware([VerifyCsrfToken::class]);

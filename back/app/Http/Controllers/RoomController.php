@@ -100,7 +100,7 @@ class RoomController extends Controller
 //        var_dump("test");
 //
         if (!$room->is_connect && $room->host_user_id && $room->join_user_id) {
-            $room->is_connect = true;
+//            $room->is_connect = true;
 
 
             if($room->host_user_speed_power > $room->join_user_speed_power) {
@@ -168,6 +168,20 @@ class RoomController extends Controller
 
 
         return response()->json(['roomList'=> $room,'status' => 201]);
+    }
+
+
+    public function approvalJoinRoom(Request $request)
+    {
+        $room = Room::find($request->room_id);
+
+        $room->update([
+            'is_connect' => true
+        ]);
+
+        $room->save();
+
+        return response()->json(['room'=> $room,'status' => 201]);
     }
 
 

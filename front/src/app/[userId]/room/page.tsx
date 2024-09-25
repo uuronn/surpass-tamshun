@@ -102,7 +102,7 @@ export default function Room() {
           value={comment}
           onChange={(e) => setComment(e.target.value)}
           maxLength={30}
-          className="w-full min-h-[50px] p-4 pr-16 text-base text-gray-900 bg-white border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none transition-all duration-200 ease-in-out shadow-lg hover:shadow-2xl transition-shadow duration-300 ease-in-out"
+          className="w-full min-h-[50px] p-4 pr-16 text-base text-gray-900 bg-white border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none transition-all ease-in-out shadow-lg hover:shadow-2xl  duration-300 "
         />
         <RoomCreationButton />
         <Button
@@ -141,7 +141,7 @@ export default function Room() {
                 roomUrl="/battleshuzo.png"
                 roomComment={comment}
               />
-            ))} */}
+            ))}
           </div>
         </div>
       </div>

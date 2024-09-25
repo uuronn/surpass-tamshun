@@ -5,8 +5,9 @@ import Level from '@/components/training/Level'
 import TrainingSkills from '@/components/training/TrainingSkills'
 import { Button } from '@/components/ui/button'
 import { useUserContext } from '@/context/UserContext'
+import { useUser } from '@/hooks/useUser'
 import { useRouter } from 'next/navigation'
-import { ReactNode, useState } from 'react'
+import { ReactNode, useEffect, useState } from 'react'
 
 export default function Home() {
   const [message, setMessage] = useState<string>('')
@@ -17,11 +18,26 @@ export default function Home() {
   const [guardValue, setGuardValue] = useState<number>(0)
   const [hpValue, sethpValue] = useState<number>(0)
   const [speedValue, setSpeedValue] = useState<number>(0)
+  const [currentUser, setCurrentUser] = useState()
 
   const { user } = useUserContext()
   const router = useRouter()
 
+  
+  useEffect(() => {
+    if (!user) return;
+
+  (async () => {
+  const currentUser = await useUser(user.userId)
+  setCurrentUser(currentUser.user)
+  
+  })();
+
+  },[])
+
+
   const editReply = (data: any): JSX.Element => {
+    setCurrentUser({hit_point: data.hitPoint, attack_power: data.attackPower, guard_power: data.guardPower, speed_power: data.speedPower, total_xp: data.totalXp})
     return (
       <div>
         <p>HP: {data.hitPoint}</p>
@@ -50,8 +66,6 @@ export default function Home() {
       })
 
       const data = await res.json()
-
-      console.log(data)
 
       if (res.ok) {
         setReply(editReply(data.result))
@@ -134,11 +148,11 @@ export default function Home() {
         }}
       >
         <Level
-          level={levelValue}
-          hpValue={hpValue}
-          attackValue={attackValue}
-          guardValue={guardValue}
-          speedValue={speedValue}
+          level={currentUser?.total_xp}
+          hpValue={currentUser?.hit_point}
+          attackValue={currentUser?.attack_power}
+          guardValue={currentUser?.guard_power}
+          speedValue={currentUser?.speed_power}
         />
       </div>
     </div>

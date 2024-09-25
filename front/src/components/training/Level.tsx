@@ -64,14 +64,14 @@ export default function Level({ level, hpValue, attackValue, guardValue, speedVa
           fontWeight: 'bold',
         }}
       >
-        Lv {level}
+        経験値 {level}
       </div>
 
       <div style={{ padding: '40px 20px' }}>
         {/* 定数を使ってStatusBarを呼び出す */}
         <StatusBar label="HP" value={hpValue} bgColor="pink" />
         <StatusBar label="攻撃" value={attackValue} bgColor="red" />
-        <StatusBar label="防御" value={guardValue} bgColor="blue" />
+        <StatusBar label="回復" value={guardValue} bgColor="blue" />
         <StatusBar label="速さ" value={speedValue} bgColor="green" />
       </div>
     </div>

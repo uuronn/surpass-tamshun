@@ -141,7 +141,7 @@ export default function Room() {
                 roomUrl="/battleshuzo.png"
                 roomComment={comment}
               />
-            ))}
+            ))} */}
           </div>
         </div>
       </div>

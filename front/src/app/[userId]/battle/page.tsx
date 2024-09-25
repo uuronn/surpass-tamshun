@@ -6,10 +6,53 @@ import Unit, { UnitRef } from '@/components/battle/Unit'
 import Log from '@/components/battle/Log'
 import HealthBar from '@/components/battle/HealthBar'
 import Status from '@/components/battle/Status'
+import { useRoomContext } from '@/context/RoomContext'
+import { UnitParameters } from '@/type/unit'
+import { useUserContext } from '@/context/UserContext'
+import { Room } from '@/type/room'
 
 export default function Battle() {
   const [selecting, setSelecting] = useState<boolean>(true)
   const [loading, setLoading] = useState<boolean>(false)
+  const [turn, setTurn] = useState<number>(0)
+  const [prevRoom, setPrevRoom] = useState<Room>()
+
+  const { user } = useUserContext()
+  const { currentRoom } = useRoomContext()
+
+  const hostUnit = {
+    name: currentRoom?.hostName,
+    attack: currentRoom?.hostAttack,
+    guard: currentRoom?.hostGuard,
+    speed: currentRoom?.hostSpeed,
+    hp: currentRoom?.hostHp,
+    maxHp: currentRoom?.hostMaxHp,
+    xp: currentRoom?.hostXp,
+  } as UnitParameters
+
+  const joinUnit = {
+    name: currentRoom?.joinName,
+    attack: currentRoom?.joinAttack,
+    guard: currentRoom?.joinGuard,
+    speed: currentRoom?.joinSpeed,
+    hp: currentRoom?.joinHp,
+    maxHp: currentRoom?.joinMaxHp,
+    xp: currentRoom?.joinXp,
+  } as UnitParameters
+
+  const onAttack = async () => {
+    const res = await fetch('http://localhost/api/action', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        room_id: currentRoom?.roomId,
+        user_id: user?.userId,
+      }),
+    })
+    const data = await res.json()
+  }
 
   const log = ['Player1がゲームに参加しました。', 'Player1がゲームに参加しました。']
 
@@ -20,17 +63,17 @@ export default function Battle() {
     return unitRefs[unitIndex].current?.[effectName](value)
   }
 
-  useEffect(() => {
-    const runEffects = async () => {
-      await triggerEffect(0, 'fire', 0) // ユニット0にダメージ30を適用
-      await triggerEffect(0, 'flame', 0) // ユニット0にダメージ50を適用
-      await triggerEffect(0, 'heal', 20) // ユニット0にヒール20を適用
-      await triggerEffect(0, 'left', 0) // 値が0なので数値は表示されない
-      await triggerEffect(0, 'right', 0) // 同上
-      await triggerEffect(0, 'blink', -30) // 同上
-    }
-    runEffects()
-  }, [])
+  // useEffect(() => {
+  //   const runEffects = async () => {
+  //     await triggerEffect(0, 'fire', 0) // ユニット0にダメージ30を適用
+  //     await triggerEffect(0, 'flame', 0) // ユニット0にダメージ50を適用
+  //     await triggerEffect(0, 'heal', 20) // ユニット0にヒール20を適用
+  //     await triggerEffect(0, 'left', 0) // 値が0なので数値は表示されない
+  //     await triggerEffect(0, 'right', 0) // 同上
+  //     await triggerEffect(0, 'blink', -30) // 同上
+  //   }
+  //   runEffects()
+  // }, [])
 
   return (
     <div
@@ -55,16 +98,28 @@ export default function Battle() {
           paddingBottom: '20px',
         }}
       >
-        <Status name="ああああ" attack={20} defense={20} speed={20} xp={60} />
+        <Status
+          name={hostUnit.name}
+          attack={hostUnit.attack}
+          guard={hostUnit.guard}
+          speed={hostUnit.speed}
+          xp={hostUnit.xp}
+        />
         <div className="flex flex-col items-center gap-10">
-          <HealthBar currentHP={50} maxHP={100} />
+          <HealthBar currentHP={hostUnit.hp} maxHP={hostUnit.maxHp} />
           <Unit ref={unitRefs[0]} />
         </div>
         <div className="flex flex-col items-center gap-10">
-          <HealthBar currentHP={50} maxHP={100} />
+          <HealthBar currentHP={joinUnit.hp} maxHP={joinUnit.maxHp} />
           <Unit ref={unitRefs[1]} />
         </div>
-        <Status name="ああああああああああああ" attack={20} defense={20} speed={20} xp={1000} />
+        <Status
+          name={joinUnit.name}
+          attack={joinUnit.attack}
+          guard={joinUnit.guard}
+          speed={joinUnit.speed}
+          xp={joinUnit.xp}
+        />
       </div>
       <div
         style={{
@@ -76,7 +131,13 @@ export default function Battle() {
           padding: '20px',
         }}
       >
-        {selecting ? <BattleButtons /> : <Log log={log} />}
+        {loading ? (
+          <Log log={['通信中...']} />
+        ) : selecting ? (
+          <BattleButtons onAttack={onAttack} />
+        ) : (
+          <Log log={log} />
+        )}
       </div>
     </div>
   )

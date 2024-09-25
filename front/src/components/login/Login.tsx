@@ -43,7 +43,7 @@ export default function Login() {
 
 function SignIn(isLoading: boolean) {
   const router = useRouter()
-  const { setUser, fetchUser } = useUserContext()
+  const { setUser, getUser } = useUserContext()
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     // ログイン処理をここに追加
@@ -67,7 +67,7 @@ function SignIn(isLoading: boolean) {
     const userId = data.user.id
     router.push(`/${userId}`)
     localStorage.setItem('userId', userId)
-    const userdata = await fetchUser(userId)
+    const userdata = await getUser(userId)
     setUser(userdata)
   }
 
@@ -120,7 +120,7 @@ function SignIn(isLoading: boolean) {
 }
 
 function SignUp(isLoading: boolean) {
-  const { setUser, fetchUser } = useUserContext()
+  const { setUser, getUser } = useUserContext()
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
@@ -147,7 +147,7 @@ function SignUp(isLoading: boolean) {
     const userId = data.user.id
 
     localStorage.setItem('userId', userId)
-    const userdata = await fetchUser(userId)
+    const userdata = await getUser(userId)
     setUser(userdata)
   }
 

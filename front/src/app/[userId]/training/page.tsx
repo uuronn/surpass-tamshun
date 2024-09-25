@@ -41,7 +41,7 @@ export default function Home() {
       style={{
         height: '100%',
         width: '100%',
-        backgroundImage: `url('/training.jpg')`,
+        backgroundImage: `url('/training.png')`,
         backgroundSize: 'cover',
         display: 'flex',
         justifyContent: 'center',

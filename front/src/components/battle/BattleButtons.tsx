@@ -1,7 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import { Sword, Shield, Zap } from 'lucide-react'
+import { Sword, Shield, Zap, Flame } from 'lucide-react'
+import { Button } from '../ui/button'
 
 type ButtonType = '攻撃' | '防御' | 'わざ'
 
@@ -9,9 +10,9 @@ export default function BattleButtons() {
   const [selectedButton, setSelectedButton] = useState<ButtonType | null>(null)
 
   const buttons: { type: ButtonType; icon: React.ReactNode; color: string }[] = [
-    { type: '攻撃', icon: <Sword className="w-12 h-6" />, color: 'from-red-400 to-red-600' },
-    { type: '防御', icon: <Shield className="w-12 h-6" />, color: 'from-blue-400 to-blue-600' },
-    { type: 'わざ', icon: <Zap className="w-12 h-6" />, color: 'from-yellow-400 to-yellow-600' },
+    { type: '攻撃', icon: <Sword className="w-16 h-12" />, color: 'from-red-400 to-red-600' },
+    { type: '防御', icon: <Shield className="w-16 h-12" />, color: 'from-blue-400 to-blue-600' },
+    { type: 'わざ', icon: <Flame className="w-16 h-12" />, color: 'from-yellow-400 to-yellow-600' },
   ]
 
   const handleClick = (type: ButtonType) => {
@@ -20,14 +21,14 @@ export default function BattleButtons() {
   }
 
   return (
-    <div className="flex flex-col sm:flex-row gap-4">
+    <div className="flex flex-col sm:flex-row gap-12">
       {buttons.map(({ type, icon, color }) => (
-        <button
+        <Button
           key={type}
           className={`
             flex-1 flex items-center justify-center
-            px-4 py-3 rounded-full
-            text-white font-bold text-lg
+            pr-8 py-8 rounded-full
+            text-white font-bold text-2xl
             transition-all duration-300 ease-in-out
             transform hover:scale-105 hover:shadow-lg
             active:scale-95
@@ -38,7 +39,7 @@ export default function BattleButtons() {
         >
           {icon}
           <span className="ml-2">{type}</span>
-        </button>
+        </Button>
       ))}
     </div>
   )

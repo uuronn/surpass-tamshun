@@ -18,11 +18,39 @@ class OpenAIController extends Controller
 
         $user = User::find($request->userId);
 
-        $hotWordsString = implode(', ', $user->hot_words);
+//        $hotWordsString = implode(', ', $user->hot_words);
 
         // $hotWordsJson = json_encode( $user->hot_words, JSON_UNESCAPED_UNICODE);
+        $hotWordsString = (is_array($user->hot_words) && !empty($user->hot_words))
+            ? implode(', ', $user->hot_words)
+            : '';
+
+        $hotWordsString = (is_array($user->hot_words) && !empty($user->hot_words))
+            ? implode(', ', $user->hot_words)
+            : '';
 
         $prompt = $request->input('prompt');
+
+        $messages = [];
+
+// $hotWordsString が空でない場合、システムメッセージを追加
+        if ($hotWordsString !== '') {
+            $messages[] = [
+                'role' => 'system',
+                'content' => "
+            あなたはこの【熱い言葉】投げられて、育ちました。これらを\"部分的\"に参考に会話してください。
+            そのまま使うのはNGです。
+
+            【熱い言葉】
+            {$hotWordsString}"
+            ];
+        }
+
+// ユーザーメッセージを追加
+        $messages[] = [
+            'role' => 'user',
+            'content' => $prompt
+        ];
 
         $client = new Client();
 
@@ -34,21 +62,7 @@ class OpenAIController extends Controller
                 ],
                 'json' => [
                     'model' => 'gpt-3.5-turbo', // 正しいモデル名
-                    'messages' => [
-                        [
-                            'role' => 'system',
-                            'content' => "
-                            あなたはこの【熱い言葉】投げられて、育ちました。これらを\"部分的\"に参考に会話してください。
-                            そのまま使うのはNGです。
-
-                            【熱い言葉】
-                            {$hotWordsString}"
-                        ],
-                        [
-                            'role' => 'user',
-                            'content' => $prompt
-                        ]
-                    ],
+                    'messages' => $messages,
                     'max_tokens' => 150,
                 ],
             ]);
@@ -74,7 +88,7 @@ class OpenAIController extends Controller
     {
         $prompt = $request->input('prompt');
 
-        $user = User::where('id', $request['user_id'])->first();
+        $user = User::where('id', $request['userId'])->first();
 
 //        var_dump($user->level);
 

@@ -83,29 +83,8 @@ const StatusBar = ({
 
 export default function Room() {
   return (
-    <div
-      style={{
-        // height: '100vh',
-        width: '100vw',
-        display: 'flex',
-        flexDirection: 'column',
-        position: 'relative',
-        justifyContent: 'center',
-        alignItems: 'center',
-      }}
-    >
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'row',
-          justifyContent: 'center',
-          width: '100%',
-        }}
-      >
-        <TextInput />
-        <RoomCreationButton />
-      </div>
-
+    <div className="container">
+      {/* <RoomCreationButton /> */}
       <div
         style={{
           display: 'flex',

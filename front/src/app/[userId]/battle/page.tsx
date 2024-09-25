@@ -12,14 +12,18 @@ import { useUserContext } from '@/context/UserContext'
 import { Room } from '@/type/room'
 
 export default function Battle() {
-  const [selecting, setSelecting] = useState<boolean>(true)
   const [loading, setLoading] = useState<boolean>(false)
-  const [turn, setTurn] = useState<number>(0)
-  const [prevRoom, setPrevRoom] = useState<Room>()
+  const [logging, setLogging] = useState<boolean>(false)
+  const [turn, setTurn] = useState<boolean>(false)
+  const [log, setLog] = useState<string[]>([])
+  const [processing, setProcessing] = useState<boolean>(false)
 
   const { user } = useUserContext()
-  const { currentRoom } = useRoomContext()
+  const { currentRoom, prevRoom } = useRoomContext()
 
+  const unitRefs = [useRef<UnitRef>(null), useRef<UnitRef>(null)]
+
+  // ユニットの情報を取得
   const hostUnit = {
     name: currentRoom?.hostName,
     attack: currentRoom?.hostAttack,
@@ -40,8 +44,10 @@ export default function Battle() {
     xp: currentRoom?.joinXp,
   } as UnitParameters
 
+  // 攻撃ボタンのハンドラ
   const onAttack = async () => {
-    const res = await fetch('http://localhost/api/action', {
+    setLoading(true)
+    await fetch('http://localhost/api/action', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -51,29 +57,107 @@ export default function Battle() {
         user_id: user?.userId,
       }),
     })
-    const data = await res.json()
   }
 
-  const log = ['Player1がゲームに参加しました。', 'Player1がゲームに参加しました。']
+  // 差分の計算
+  const computeDifferences = (prevRoom: Room, currentRoom: Room): Difference[] => {
+    const differences = []
 
-  const unitCount = 2
-  const unitRefs = Array.from({ length: unitCount }, () => useRef<UnitRef>(null))
+    if (prevRoom.hostHp !== currentRoom.hostHp) {
+      differences.push({
+        unit: 'host',
+        hpChange: currentRoom.hostHp && prevRoom.hostHp ? currentRoom.hostHp - prevRoom.hostHp : 0,
+      } as Difference)
+    }
 
-  const triggerEffect = (unitIndex: number, effectName: keyof UnitRef, value: number) => {
-    return unitRefs[unitIndex].current?.[effectName](value)
+    if (prevRoom.joinHp !== currentRoom.joinHp) {
+      differences.push({
+        unit: 'join',
+        hpChange: currentRoom.joinHp && prevRoom.joinHp ? currentRoom.joinHp - prevRoom.joinHp : 0,
+      } as Difference)
+    }
+
+    return differences
   }
 
-  // useEffect(() => {
-  //   const runEffects = async () => {
-  //     await triggerEffect(0, 'fire', 0) // ユニット0にダメージ30を適用
-  //     await triggerEffect(0, 'flame', 0) // ユニット0にダメージ50を適用
-  //     await triggerEffect(0, 'heal', 20) // ユニット0にヒール20を適用
-  //     await triggerEffect(0, 'left', 0) // 値が0なので数値は表示されない
-  //     await triggerEffect(0, 'right', 0) // 同上
-  //     await triggerEffect(0, 'blink', -30) // 同上
-  //   }
-  //   runEffects()
-  // }, [])
+  type Difference = {
+    unit: 'host' | 'join'
+    hpChange: number
+  }
+
+  // ログの生成
+  const generateLogs = (differences: Difference[]) => {
+    return differences.map((diff) => {
+      const unitName = diff.unit === 'host' ? hostUnit.name : joinUnit.name
+      if (diff.hpChange < 0) {
+        return `${unitName}は${-diff.hpChange}のダメージを受けた！`
+      } else if (diff.hpChange > 0) {
+        return `${unitName}は${diff.hpChange}のHPを回復した！`
+      }
+      return ''
+    })
+  }
+
+  // エフェクトの適用
+  const applyEffects = async (differences: Difference[]) => {
+    for (const diff of differences) {
+      console.log(diff)
+      const unitIndex = diff.unit === 'host' ? 0 : 1
+      const enemyIndex = unitIndex === 0 ? 1 : 0
+      console.log(unitIndex, enemyIndex)
+      if (diff.hpChange < 0) {
+        const direction = enemyIndex === 0 ? 'right' : 'left'
+        await triggerEffect(enemyIndex, direction, 0)
+        if (Math.abs(diff.hpChange) >= 20) {
+          await triggerEffect(unitIndex, 'flame', 0)
+        } else {
+          await triggerEffect(unitIndex, 'fire', 0)
+        }
+        await triggerEffect(unitIndex, 'blink', diff.hpChange)
+      } else if (diff.hpChange > 0) {
+        await triggerEffect(unitIndex, 'heal', diff.hpChange)
+      }
+    }
+  }
+
+  // ユニットへのエフェクト適用関数
+  const triggerEffect = async (unitIndex: number, effectName: keyof UnitRef, value: number) => {
+    if (unitRefs[unitIndex].current && unitRefs[unitIndex].current[effectName]) {
+      await unitRefs[unitIndex].current[effectName](value)
+    }
+  }
+
+  // currentRoomの変更を監視
+  useEffect(() => {
+    if (!prevRoom || !currentRoom) {
+      setTurn(currentRoom?.turn === user?.userId)
+      return
+    }
+
+    const differences = computeDifferences(prevRoom, currentRoom)
+
+    if (differences.length > 0 && !processing) {
+      setProcessing(true)
+      setLoading(false)
+      console.log(differences)
+      const newLogs = generateLogs(differences)
+      setLog(newLogs)
+      setLogging(true)
+
+      // エフェクトを適用
+      applyEffects(differences)
+
+      // ログの表示が終わったら次の処理へ
+      setTimeout(() => {
+        setLogging(false)
+        setTurn(currentRoom.turn === user?.userId)
+        setProcessing(false)
+      }, 2000 * newLogs.length) // ログ1つにつき2秒表示
+    } else {
+      // 自分のターンかどうかを更新
+      setTurn(currentRoom.turn === user?.userId)
+    }
+  }, [currentRoom])
 
   return (
     <div
@@ -133,10 +217,12 @@ export default function Battle() {
       >
         {loading ? (
           <Log log={['通信中...']} />
-        ) : selecting ? (
+        ) : logging ? (
+          <Log log={log} />
+        ) : turn ? (
           <BattleButtons onAttack={onAttack} />
         ) : (
-          <Log log={log} />
+          <Log log={['相手のターン']} />
         )}
       </div>
     </div>

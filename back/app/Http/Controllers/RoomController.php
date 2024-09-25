@@ -138,7 +138,7 @@ class RoomController extends Controller
             return response()->json(['room' => $room,'win' => $room->join_user_id]);
         }
 
-        if ($room->join_user_hit_point <= 0) {
+        if ($room->join_user_id && $room->join_user_hit_point <= 0) {
             $room->is_battle_finish = true;
             $room->save();
 

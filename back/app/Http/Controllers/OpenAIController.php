@@ -173,7 +173,7 @@ class OpenAIController extends Controller
             $user->speed_power += $scores['speed_power'];
             $user->hit_point += $scores['hit_point'];
 
-            $user->total_xp = $user->attack_power + $user->guard_power + $user->hit_point;
+            $user->total_xp = $user->attack_power + $user->guard_power + $user->speed_power + $user->hit_point;
 //            var_dump($generatedText->json());
 //            $resultScore = preg_replace('/\D/', '', $generatedText);
 

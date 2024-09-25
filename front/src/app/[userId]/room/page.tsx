@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import { useRoomContext } from '@/context/RoomContext'
@@ -8,58 +8,30 @@ import RoomCard from '@/components/room/RoomCard'
 
 export default function Room() {
   const [comment, setComment] = useState<string>('')
+  const [characters, setCharacters] = useState<any[]>([])
 
-  const characters = [
-    {
-      id: 1,
-      name: '松岡修造',
-      level: 100,
-      comment: 'あきらめるなーーー！！',
-      imageUrl: '/shuzohonki.png',
-    },
-    {
-      id: 2,
-      name: '松岡修造',
-      level: 100,
-      comment: 'あきらめるなーーー！！',
-      imageUrl: '/shuzohonki.png',
-    },
-    {
-      id: 3,
-      name: '松岡修造',
-      level: 100,
-      comment: 'あきらめるなーーー！！',
-      imageUrl: '/shuzohonki.png',
-    },
-    {
-      id: 4,
-      name: '松岡修造',
-      level: 100,
-      comment: 'あきらめるなーーー！！',
-      imageUrl: '/shuzohonki.png',
-    },
-    {
-      id: 5,
-      name: '松岡修造',
-      level: 100,
-      comment: 'あきらめるなーーー！！',
-      imageUrl: '/shuzohonki.png',
-    },
-    // {
-    //   id: 6,
-    //   name: '松岡修造',
-    //   level: 100,
-    //   comment: 'あきらめるなーーー！！',
-    //   imageUrl: '/shuzohonki.png',
-    // },
-    // {
-    //   id: 7,
-    //   name: '松岡修造',
-    //   level: 100,
-    //   comment: 'あきらめるなーーー！！',
-    //   imageUrl: '/shuzohonki.png',
-    // },
-  ]
+  // useEffectでルームリストを取得する
+  useEffect(() => {
+    const fetchRoomList = async () => {
+      try {
+        const res = await fetch('http://localhost/api/getListRoom', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+        if (!res.ok) {
+          throw new Error('Failed to fetch room list')
+        }
+        const data = await res.json()
+        setCharacters(data.rooms) // 取得したデータをcharactersにセット
+      } catch (error) {
+        console.error('Error fetching room list:', error)
+      }
+    }
+
+    fetchRoomList()
+  }, []) // コンポーネントの初期マウント時に一度だけ実行
 
   return (
     <div
@@ -102,11 +74,11 @@ export default function Room() {
           >
             {characters.map((char) => (
               <RoomCard
-                key={char.id}
-                name="ああああ"
-                level={10}
-                url="/battleshuzo.png"
-                comment="よろしくお願いします"
+                key={char.id} // APIから取得したルームのidを使用
+                name={char.name} // APIから取得したルームの名前
+                level={char.level} // ルームのレベル
+                url={char.imageUrl} // ルームの画像URL
+                comment={char.comment} // ルームのコメント
               />
             ))}
           </div>

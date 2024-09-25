@@ -1,10 +1,11 @@
 export type Room = {
   roomId: string
-  hostUserId: string
-  hostAttack: number
-  hostGuard: number
-  hostHp: number
-  hostXp: number
-  guestUserId: string
+  hostUserId: string | null
+  hostAttack: number | null
+  hostGuard: number | null
+  hostHp: number | null
+  hostXp: number | null
+  guestUserId: string | null
+  isConnected: boolean
   isFinished: boolean
 }

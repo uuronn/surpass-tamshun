@@ -55,9 +55,25 @@ export function RoomProvider({ children }: { children: ReactNode }) {
       }),
     })
     const data = await res.json()
-    console.log(data)
-  }
+    const roomId = data.room.id
+    const userId = user?.userId
+    if (!userId) {
+      return
+    }
+    const roomData: Room = {
+      roomId: roomId,
+      hostUserId: user?.userId,
+      hostAttack: 10,
+      hostGuard: 10,
+      hostHp: 100,
+      hostXp: 1000,
+      guestUserId: null,
+      isConnected: false,
+      isFinished: false,
+    }
 
+    setCurrentRoom(roomData)
+  }
   const joinRoom = async (roomId: string): Promise<void> => {
     const res = await fetch('http://localhost/api/joinRoom', {
       method: 'POST',
@@ -73,9 +89,23 @@ export function RoomProvider({ children }: { children: ReactNode }) {
     console.log(data)
   }
 
+  useEffect(() => {
+    if (currentRoom) {
+      const intervalId = setInterval(() => {
+        getCurrentRoom()
+      }, 1000)
+
+      return () => clearInterval(intervalId)
+    }
+  }, [currentRoom])
+
   return (
     <RoomContext.Provider value={{ currentRoom, getCurrentRoom, createRoom, joinRoom }}>
-      {children}
+      {!(currentRoom !== undefined && currentRoom?.isConnected == false) ? (
+        children
+      ) : (
+        <Loading message="マッチング中..." />
+      )}
     </RoomContext.Provider>
   )
 }

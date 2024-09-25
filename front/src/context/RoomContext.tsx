@@ -14,7 +14,7 @@ import { Button } from '@/components/ui/button'
 
 const RoomContext = createContext<{
   currentRoom: Room | null | undefined
-  getCurrentRoom: () => void
+  getCurrentRoom:() => void
   prevRoom: Room | null | undefined
   createRoom: () => void
   joinRoom: (roomId: string) => void
@@ -40,6 +40,9 @@ export function RoomProvider({ children }: { children: ReactNode }) {
   const router = useRouter()
 
   const getCurrentRoom = async (): Promise<void> => {
+    if (!isHost && !currentRoom?.joinUserId) {
+      setCurrentRoom(undefined)
+    }
     // 前回の部屋情報を保持
     const prevRoomData = currentRoom ? { ...currentRoom } : null
 
@@ -201,14 +204,14 @@ export function RoomProvider({ children }: { children: ReactNode }) {
           .map((roomData: any) => ({
             roomId: roomData.id,
             hostUserId: roomData.host_user_id,
-            hostName: 'ホスト',
+            hostName: roomData.host_user_name,
             hostAttack: roomData.host_user_attack_power,
             hostGuard: roomData.host_user_guard_power,
             hostSpeed: roomData.host_user_speed_power,
             hostHp: roomData.host_user_hit_point,
             hostXp: roomData.host_xp,
             joinUserId: roomData.join_user_id,
-            joinName: 'ゲスト',
+            joinName: roomData.join_user_name,
             joinAttack: roomData.join_user_attack_power,
             joinGuard: roomData.join_user_guard_power,
             joinSpeed: roomData.join_user_speed_power,
@@ -272,8 +275,9 @@ export function RoomProvider({ children }: { children: ReactNode }) {
       ) : isHost && matched && !connected ? (
         <Matched
           opponent={{
+            roomId: currentRoom?.roomId,
             name: currentRoom?.joinName || '名無しの修造',
-            level: xpToLevel(currentRoom?.joinXp || 0),
+            level: xpToLevel(currentRoom?.joinXp || 1),
             attack: currentRoom?.joinAttack || 0,
             guard: currentRoom?.joinGuard || 0,
             speed: currentRoom?.joinSpeed || 0,
@@ -281,7 +285,7 @@ export function RoomProvider({ children }: { children: ReactNode }) {
           }}
         />
       ) : !isHost && !connected && !!currentRoom ? (
-        <Loading message="相手の承認を待っています..." />
+        <Loading message="相手の承諾を待っています..." />
       ) : loading ? (
         <Loading message="対戦情報を取得しています..." />
       ) : currentRoom?.isFinished ? (

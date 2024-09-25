@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import Image from 'next/image'
 
 interface OpponentData {
+  roomId: string
   name: string
   level: number
   attack: number
@@ -22,6 +23,30 @@ export default function Matched({ opponent }: { opponent: OpponentData }) {
     return () => clearInterval(interval)
   }, [])
 
+  const accept = async () => {
+    await fetch('http://localhost/api/approvalJoinRoom', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        room_id: opponent.roomId,
+      }),
+    })
+  }
+
+  const reject = async () => {
+    await fetch('http://localhost/api/deleteJoinUserRoom', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        room_id: opponent.roomId,
+      }),
+    })
+  }
+
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-yellow-400 via-red-500 to-pink-500">
       <p className="text-white text-4xl mb-8">対戦相手が見つかりました！</p>
@@ -31,8 +56,8 @@ export default function Matched({ opponent }: { opponent: OpponentData }) {
           boxShadow: '0 0 20px 10px rgba(255, 255, 255, 0.7)',
         }}
       >
-        <div className="p-4">
-          <h2 className="text-2xl font-bold mb-2">{opponent.name}</h2>
+        <div className="p-4 ">
+          <h2 className="text-2xl font-bold mb-2 ml-2">{opponent.name}</h2>
           <div className="relative w-full h-48 mb-4">
             <Image
               src={opponent.imageUrl}
@@ -51,13 +76,13 @@ export default function Matched({ opponent }: { opponent: OpponentData }) {
           <div className="flex space-x-4">
             <button
               className="flex-1 py-2 bg-green-500 text-white font-semibold rounded-full hover:bg-green-600 transition-colors"
-              onClick={() => console.log('対戦承諾')}
+              onClick={accept}
             >
               承諾
             </button>
             <button
               className="flex-1 py-2 bg-red-500 text-white font-semibold rounded-full hover:bg-red-600 transition-colors"
-              onClick={() => console.log('対戦拒否')}
+              onClick={reject}
             >
               拒否
             </button>

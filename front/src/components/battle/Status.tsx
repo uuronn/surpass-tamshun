@@ -13,11 +13,11 @@ type StatusProps = {
 export default function Status({ name, attack, defense, speed, xp }: StatusProps) {
   const level = xpToLevel(xp)
   return (
-    <div className="mb-12 pb-6 w-full max-w-72 mx-auto bg-gradient-to-b from-gray-900 to-gray-800 rounded-lg shadow-lg overflow-hidden border-2 border-white">
-      <div className="p-6 space-y-6">
-        <div className="flex justify-between items-center border-b-2 border-white pb-2">
-          <h2 className="text-xl font-bold text-white">{name}</h2>
-          <span className="text-2xl font-semibold text-white min-w-16">Lv. {level}</span>
+    <div className="m-2 mb-12 pb-6 w-full max-w-72 mx-auto bg-gradient-to-b from-gray-900 to-gray-800 rounded-lg shadow-lg overflow-hidden border-2 border-white">
+      <div className="p-3 space-y-6">
+        <div className="flex justify-center items-center border-b-2 border-white pb-2 gap-2">
+          <h2 className="text-sm font-bold text-white">{name}</h2>
+          <span className="text-sm font-semibold text-white min-w-8">Lv{level}</span>
         </div>
         <div className="space-y-4">
           <StatusBar

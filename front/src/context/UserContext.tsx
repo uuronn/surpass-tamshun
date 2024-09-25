@@ -1,6 +1,6 @@
 'use client'
 
-import Loading from '@/components/login/Loading'
+import Loading from '@/components/common/Loading'
 import Login from '@/components/login/Login'
 import { User } from '@/type/user'
 import { useRouter } from 'next/navigation'

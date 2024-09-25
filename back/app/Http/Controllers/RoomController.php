@@ -87,9 +87,9 @@ class RoomController extends Controller
     {
         $room = Room::find($request->room_id);
 
-        if (!$room->is_connect) {
-            return response()->json(['room' => $room, 'status' => "待機中です"]);
-        }
+        // if (!$room->is_connect) {
+        //     return response()->json(['room' => $room, 'status' => "待機中です"]);
+        // }
 
 //        var_dump("test");
 //

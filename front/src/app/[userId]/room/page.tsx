@@ -72,7 +72,7 @@ export default function Room() {
               width: '100%',
             }}
           >
-            {characters.map((char) => (
+            {/* {characters.map((char) => (
               <RoomCard
                 key={char.id} // APIから取得したルームのidを使用
                 name={char.name} // APIから取得したルームの名前
@@ -80,7 +80,7 @@ export default function Room() {
                 url={char.imageUrl} // ルームの画像URL
                 comment={char.comment} // ルームのコメント
               />
-            ))}
+            ))} */}
           </div>
         </div>
       </div>

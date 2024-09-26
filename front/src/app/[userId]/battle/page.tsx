@@ -14,6 +14,7 @@ import { useRouter } from 'next/navigation'
 import Victory from '@/components/result/Victory'
 import Defeat from '@/components/result/Defeat'
 import { Button } from '@/components/ui/button'
+import { attackLog, damageLog, healLog, strikeLog } from '@/lib/createLog'
 
 export default function Battle() {
   const [loading, setLoading] = useState<boolean>(false)
@@ -126,11 +127,18 @@ export default function Battle() {
     return differences.map((diff) => {
       const unitName = diff.unit === 'host' ? hostUnit.name : joinUnit.name
       if (diff.hpChange < 0) {
-        return `${unitName}は${-diff.hpChange}のダメージを受けた！`
+        // ダメージを受けた場合
+        return damageLog(unitName, -diff.hpChange)
       } else if (diff.hpChange > 0) {
-        return `${unitName}は${diff.hpChange}のHPを回復した！`
+        // HPを回復した場合
+        return healLog(unitName, diff.hpChange)
+      } else if (diff.hpChange <= -50) {
+        // 必殺技を使った場合
+        return strikeLog(unitName)
+      } else {
+        // 通常攻撃の場合
+        return attackLog(unitName)
       }
-      return ''
     })
   }
 
@@ -184,36 +192,39 @@ export default function Battle() {
       applyEffects(differences)
 
       // ログの表示が終わったら次の処理へ
-      setTimeout(() => {
-        setLogging(false)
-        setTurn(currentRoom.turn === user?.userId)
-        setProcessing(false)
+      setTimeout(
+        () => {
+          setLogging(false)
+          setTurn(currentRoom.turn === user?.userId)
+          setProcessing(false)
 
-        // ゲーム終了時の処理
-        if (currentRoom.joinHp !== null && currentRoom.hostHp !== null) {
-          if ((currentRoom.joinHp <= 0 || currentRoom.hostHp <= 0) && currentRoom.isConnected) {
-            setIsHost(currentRoom?.hostUserId === user?.userId)
-            if (!!currentRoom.hostHp && currentRoom.hostHp > 0) {
-              setHostWin(true)
-            } else {
-              setHostWin(false)
-            }
-            setCurrentRoom(undefined)
+          // ゲーム終了時の処理
+          if (currentRoom.joinHp !== null && currentRoom.hostHp !== null) {
+            if ((currentRoom.joinHp <= 0 || currentRoom.hostHp <= 0) && currentRoom.isConnected) {
+              setIsHost(currentRoom?.hostUserId === user?.userId)
+              if (!!currentRoom.hostHp && currentRoom.hostHp > 0) {
+                setHostWin(true)
+              } else {
+                setHostWin(false)
+              }
+              setCurrentRoom(undefined)
 
-            if (currentRoom.hostUserId == user?.userId) {
-              fetch('http://localhost/api/deleteRoom', {
-                method: 'DELETE',
-                headers: {
-                  'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                  room_id: currentRoom?.roomId,
-                }),
-              })
+              if (currentRoom.hostUserId == user?.userId) {
+                fetch('http://localhost/api/deleteRoom', {
+                  method: 'DELETE',
+                  headers: {
+                    'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify({
+                    room_id: currentRoom?.roomId,
+                  }),
+                })
+              }
             }
           }
-        }
-      }, 3000 * newLogs.length) // ログ1つにつき3秒表示
+        },
+        newLogs.reduce((total, log) => total + log.length * 100, 0),
+      )
     } else {
       // 自分のターンかどうかを更新
       setTurn(currentRoom.turn === user?.userId)

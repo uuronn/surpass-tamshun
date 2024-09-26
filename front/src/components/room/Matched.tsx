@@ -68,7 +68,7 @@ export default function Matched({ opponent }: { opponent: OpponentData }) {
             />
           </div>
           <div className="space-y-2 mb-4 flex flex-col items-center">
-            <StatusBar label="レベル" value={opponent.level} color="bg-purple-500" />
+            <StatusBar label="経験値" value={opponent.level} color="bg-purple-500" />
             <StatusBar label="攻撃力" value={opponent.attack} color="bg-red-500" />
             <StatusBar label="防御力" value={opponent.guard} color="bg-blue-500" />
             <StatusBar label="速さ" value={opponent.speed} color="bg-green-500" />

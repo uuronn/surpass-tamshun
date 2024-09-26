@@ -124,22 +124,16 @@ export default function Battle() {
 
   // ログの生成
   const generateLogs = (differences: Difference[]) => {
-    return differences.map((diff) => {
-      const unitName = diff.unit === 'host' ? hostUnit.name : joinUnit.name
-      if (diff.hpChange < 0) {
-        // ダメージを受けた場合
-        return damageLog(unitName, -diff.hpChange)
-      } else if (diff.hpChange > 0) {
-        // HPを回復した場合
-        return healLog(unitName, diff.hpChange)
-      } else if (diff.hpChange <= -50) {
-        // 必殺技を使った場合
-        return strikeLog(unitName)
-      } else {
-        // 通常攻撃の場合
-        return attackLog(unitName)
-      }
-    })
+    const diff = differences[0]
+    const unitName = diff.unit === 'host' ? hostUnit.name : joinUnit.name
+    const enemyName = diff.unit === 'host' ? joinUnit.name : hostUnit.name
+    if (diff.hpChange < 0 && diff.hpChange >= -50) {
+      return [attackLog(enemyName), damageLog(unitName, -diff.hpChange)]
+    } else if (diff.hpChange < 0 && diff.hpChange < -50) {
+      return [strikeLog(enemyName), damageLog(unitName, -diff.hpChange)]
+    } else if (diff.hpChange > 0) {
+      return [healLog(unitName, diff.hpChange)]
+    }
   }
 
   // エフェクトの適用
@@ -184,7 +178,7 @@ export default function Battle() {
       setProcessing(true)
       setLoading(false)
       console.log(differences)
-      const newLogs = generateLogs(differences)
+      const newLogs = generateLogs(differences) || []
       setLog(newLogs)
       setLogging(true)
 
@@ -210,7 +204,7 @@ export default function Battle() {
               setCurrentRoom(undefined)
 
               if (currentRoom.hostUserId == user?.userId) {
-                fetch('http://localhost/api/deleteRoom', {
+                fetch('http://3.114.106.137/api/deleteRoom', {
                   method: 'DELETE',
                   headers: {
                     'Content-Type': 'application/json',
@@ -242,7 +236,7 @@ export default function Battle() {
           console.log(isHost, hostWin)
 
           if (currentRoom.hostUserId == user?.userId) {
-            fetch('http://localhost/api/deleteRoom', {
+            fetch('http://3.114.106.137/api/deleteRoom', {
               method: 'DELETE',
               headers: {
                 'Content-Type': 'application/json',

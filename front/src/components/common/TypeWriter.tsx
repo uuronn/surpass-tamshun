@@ -22,7 +22,7 @@ function TypewriterText({ text, onComplete }: { text: string; onComplete?: () =>
     return () => clearInterval(interval)
   }, [text, onComplete])
 
-  return <div style={{ color: 'white', fontSize: '2rem' }}>{displayedText}</div>
+  return <div style={{ color: 'white', fontSize: '1.5rem' }}>{displayedText}</div>
 }
 
 export default TypewriterText

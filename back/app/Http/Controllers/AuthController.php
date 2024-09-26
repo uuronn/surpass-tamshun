@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use Throwable;
 
 class AuthController extends Controller
 {
@@ -22,16 +23,19 @@ class AuthController extends Controller
 //        var_dump($request->name);
 //        var_dump($request->email);
 //        var_dump(Hash::make($request->password));
+        try {
 
         $user = User::create([
             'id' => Str::uuid()->toString(),
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-
         ]);
 
         return response()->json(['user' => $user], 201);
+        } catch (Throwable $exception) {
+            var_dump($exception);
+        }
     }
 
     public function authenticate(Request $request)

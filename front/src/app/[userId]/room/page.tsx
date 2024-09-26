@@ -96,13 +96,13 @@ export default function Room() {
       <div
         style={{ width: '50%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}
       >
-        <input
+        {/* <input
           placeholder={'コメント'}
           value={comment}
           onChange={(e) => setComment(e.target.value)}
           maxLength={30}
           className="w-full min-h-[50px] p-4 pr-16 text-base text-gray-900 bg-white border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none transition-all ease-in-out shadow-lg hover:shadow-2xl  duration-300 "
-        />
+        /> */}
         <RoomCreationButton />
         <Button
           onClick={reloadRoomList}
@@ -130,7 +130,7 @@ export default function Room() {
               <RoomCard
                 key={room.id}
                 roomID={room.id}
-                roomName={room.host_user_id}
+                roomName={room.host_user_name}
                 roomLevel={
                   room.host_user_hit_point +
                   room.host_user_attack_power +

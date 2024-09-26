@@ -55,7 +55,7 @@ export default function Battle() {
   // 攻撃ボタンのハンドラ
   const onAttack = async () => {
     setLoading(true)
-    await fetch('http://3.114.106.137/api/action', {
+    await fetch('http://localhost/api/action', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -69,7 +69,7 @@ export default function Battle() {
 
   const onHeal = async () => {
     setLoading(true)
-    await fetch('http://3.114.106.137/api/heal', {
+    await fetch('http://localhost/api/heal', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -83,7 +83,7 @@ export default function Battle() {
 
   const onSkill = async () => {
     setLoading(true)
-    await fetch('http://3.114.106.137/api/skill', {
+    await fetch('http://localhost/api/skill', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -242,6 +242,19 @@ export default function Battle() {
             })
           }
         }
+<<<<<<< Updated upstream
+=======
+
+        fetch('http://localhost/api/deleteRoom', {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            room_id: currentRoom?.roomId,
+          }),
+        })
+>>>>>>> Stashed changes
       }
     }
   }, [currentRoom])

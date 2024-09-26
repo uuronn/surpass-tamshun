@@ -53,7 +53,7 @@ function SignIn(isLoading: boolean) {
     const email = formData.get('email')
     const password = formData.get('password')
 
-    const res = await fetch('http://3.114.106.137/api/login', {
+    const res = await fetch('http://localhost/api/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -134,7 +134,7 @@ function SignUp(isLoading: boolean) {
     const email = formData.get('email')
     const password = formData.get('password')
 
-    const res = await fetch('http://3.114.106.137/api/register', {
+    const res = await fetch('http://localhost/api/register', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

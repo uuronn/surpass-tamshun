@@ -26,7 +26,7 @@ export function UserProvider({ children }: { children: ReactNode }) {
   const router = useRouter()
 
   const getUser = async (userId: string): Promise<User> => {
-    const res = await fetch(`http://3.114.106.137/api/users/${userId}`, {
+    const res = await fetch(`http://localhost/api/users/${userId}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

@@ -59,7 +59,7 @@ const LevelBadge = ({ level }: { level: number }) => {
         fontWeight: 'bold',
       }}
     >
-      Lv {level}
+      経験値 {level}
     </div>
   )
 }

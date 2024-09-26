@@ -124,9 +124,7 @@ class RoomController extends Controller
 
 
 
-        if ($room->is_connect) {
-            return response()->json(['room' => $room, 'status' => 201]);
-        }
+
 
 
 
@@ -143,6 +141,10 @@ class RoomController extends Controller
             $room->save();
 
             return response()->json(['room' => $room,'win' => $room->host_user_id]);
+        }
+
+        if ($room->is_connect) {
+            return response()->json(['room' => $room, 'status' => 201]);
         }
 ////
 //        if (!$room->join_user_id) {

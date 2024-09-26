@@ -18,7 +18,7 @@ export default function Room() {
   useEffect(() => {
     const fetchRoomList = async () => {
       try {
-        const res = await fetch('http://localhost/api/getListRoom', {
+        const res = await fetch('http://3.114.106.137/api/getListRoom', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -44,7 +44,7 @@ export default function Room() {
   // リストを再読み込みする関数
   const reloadRoomList = async () => {
     try {
-      const res = await fetch('http://localhost/api/getListRoom', {
+      const res = await fetch('http://3.114.106.137/api/getListRoom', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',

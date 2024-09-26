@@ -47,7 +47,7 @@ export function RoomProvider({ children }: { children: ReactNode }) {
     // 前回の部屋情報を保持
     const prevRoomData = currentRoom ? { ...currentRoom } : null
 
-    const res = await fetch('http://localhost/api/getRoom', {
+    const res = await fetch('http://3.114.106.137/api/getRoom', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -100,7 +100,7 @@ export function RoomProvider({ children }: { children: ReactNode }) {
   }
 
   const createRoom = async (): Promise<void> => {
-    const res = await fetch('http://localhost/api/room', {
+    const res = await fetch('http://3.114.106.137/api/room', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -142,7 +142,7 @@ export function RoomProvider({ children }: { children: ReactNode }) {
     setCurrentRoom(roomData)
   }
   const joinRoom = async (roomId: string): Promise<void> => {
-    await fetch('http://localhost/api/joinRoom', {
+    await fetch('http://3.114.106.137/api/joinRoom', {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -193,7 +193,7 @@ export function RoomProvider({ children }: { children: ReactNode }) {
     const fetchRoomList = async () => {
       setLoading(true)
       try {
-        const res = await fetch('http://localhost/api/getListRoom', {
+        const res = await fetch('http://3.114.106.137/api/getListRoom', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -246,7 +246,7 @@ export function RoomProvider({ children }: { children: ReactNode }) {
   }, [isHost, matched, connected])
 
   const back = async () => {
-    await fetch('http://localhost/api/deleteRoom', {
+    await fetch('http://3.114.106.137/api/deleteRoom', {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',

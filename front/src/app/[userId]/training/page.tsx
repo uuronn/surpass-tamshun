@@ -66,7 +66,7 @@ export default function Home() {
     setLoading(true)
     setMessage('')
     try {
-      const res = await fetch('http://localhost/api/openai/training', {
+      const res = await fetch('http://3.114.106.137/api/openai/training', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

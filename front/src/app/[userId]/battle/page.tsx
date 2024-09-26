@@ -11,6 +11,9 @@ import { UnitParameters } from '@/type/unit'
 import { useUserContext } from '@/context/UserContext'
 import { Room } from '@/type/room'
 import { useRouter } from 'next/navigation'
+import Victory from '@/components/result/Victory'
+import Defeat from '@/components/result/Defeat'
+import { Button } from '@/components/ui/button'
 
 export default function Battle() {
   const [loading, setLoading] = useState<boolean>(false)
@@ -18,9 +21,10 @@ export default function Battle() {
   const [turn, setTurn] = useState<boolean>(false)
   const [log, setLog] = useState<string[]>([])
   const [processing, setProcessing] = useState<boolean>(false)
+  const [win, setWin] = useState<boolean | undefined>()
 
   const { user } = useUserContext()
-  const { currentRoom, setCurrentRoom, prevRoom, setWin } = useRoomContext()
+  const { currentRoom, setCurrentRoom, prevRoom } = useRoomContext()
 
   const router = useRouter()
 
@@ -51,6 +55,34 @@ export default function Battle() {
   const onAttack = async () => {
     setLoading(true)
     await fetch('http://localhost/api/action', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        room_id: currentRoom?.roomId,
+        user_id: user?.userId,
+      }),
+    })
+  }
+
+  const onHeal = async () => {
+    setLoading(true)
+    await fetch('http://localhost/api/heal', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        room_id: currentRoom?.roomId,
+        user_id: user?.userId,
+      }),
+    })
+  }
+
+  const onSkill = async () => {
+    setLoading(true)
+    await fetch('http://localhost/api/skill', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -170,77 +202,111 @@ export default function Battle() {
           setWin(false)
         }
 
-        router.push(`/${user?.userId}/result`)
+        fetch('http://localhost/api/deleteRoom', {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            room_id: currentRoom?.roomId,
+          }),
+        })
       }
     }
   }, [currentRoom])
 
   return (
-    <div
-      style={{
-        height: '100%',
-        width: '100%',
-        backgroundImage: `url('/battle.png')`,
-        backgroundSize: 'cover',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-      }}
-    >
-      <div
-        style={{
-          height: '70%',
-          width: '100%',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'end',
-          paddingBottom: '20px',
-        }}
-      >
-        <Status
-          name={hostUnit.name}
-          attack={hostUnit.attack}
-          guard={hostUnit.guard}
-          speed={hostUnit.speed}
-          xp={hostUnit.xp}
-        />
-        <div className="flex flex-col items-center gap-10">
-          <HealthBar currentHP={hostUnit.hp} maxHP={hostUnit.maxHp} />
-          <Unit ref={unitRefs[0]} />
+    <>
+      {win == undefined ? (
+        <div
+          style={{
+            height: '100%',
+            width: '100%',
+            backgroundImage: `url('/battle.png')`,
+            backgroundSize: 'cover',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <div
+            style={{
+              height: '70%',
+              width: '100%',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'end',
+              paddingBottom: '20px',
+            }}
+          >
+            <Status
+              name={hostUnit.name}
+              attack={hostUnit.attack}
+              guard={hostUnit.guard}
+              speed={hostUnit.speed}
+              xp={hostUnit.xp}
+            />
+            <div className="flex flex-col items-center gap-10">
+              <HealthBar currentHP={hostUnit.hp} maxHP={hostUnit.maxHp} />
+              <Unit ref={unitRefs[0]} />
+            </div>
+            <div className="flex flex-col items-center gap-10">
+              <HealthBar currentHP={joinUnit.hp} maxHP={joinUnit.maxHp} />
+              <Unit ref={unitRefs[1]} />
+            </div>
+            <Status
+              name={joinUnit.name}
+              attack={joinUnit.attack}
+              guard={joinUnit.guard}
+              speed={joinUnit.speed}
+              xp={joinUnit.xp}
+            />
+          </div>
+          <div
+            style={{
+              height: '30%',
+              width: '100%',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              padding: '20px',
+            }}
+          >
+            {loading ? (
+              <Log log={['通信中.....']} />
+            ) : logging ? (
+              <Log log={log} />
+            ) : turn ? (
+              <BattleButtons onAttack={onAttack} onHeal={onHeal} onSkill={onSkill} />
+            ) : (
+              <Log log={['相手のターン.....']} />
+            )}
+          </div>
         </div>
-        <div className="flex flex-col items-center gap-10">
-          <HealthBar currentHP={joinUnit.hp} maxHP={joinUnit.maxHp} />
-          <Unit ref={unitRefs[1]} />
+      ) : (
+        <div
+          style={{
+            height: '100%',
+            width: '100%',
+            backgroundImage: `url('/home.png')`,
+            backgroundSize: 'cover',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          {win ? <Victory /> : <Defeat />}
+          <Button
+            onClick={() => router.push(`/${user?.userId}`)}
+            type="submit"
+            className="w-48 h-16 m-3 rounded-3xl bg-gradient-to-r from-gray-500 to-gray-600 hover:from-gray-600 hover:to-gray-700 text-white font-bold py-3 px-6 text-2xl transition-all duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50 uppercase fixed bottom-0 left-0"
+            disabled={false}
+          >
+            戻る
+          </Button>
         </div>
-        <Status
-          name={joinUnit.name}
-          attack={joinUnit.attack}
-          guard={joinUnit.guard}
-          speed={joinUnit.speed}
-          xp={joinUnit.xp}
-        />
-      </div>
-      <div
-        style={{
-          height: '30%',
-          width: '100%',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          padding: '20px',
-        }}
-      >
-        {loading ? (
-          <Log log={['通信中.....']} />
-        ) : logging ? (
-          <Log log={log} />
-        ) : turn ? (
-          <BattleButtons onAttack={onAttack} />
-        ) : (
-          <Log log={['相手のターン.....']} />
-        )}
-      </div>
-    </div>
+      )}
+    </>
   )
 }

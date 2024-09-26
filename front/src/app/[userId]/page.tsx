@@ -30,21 +30,15 @@ export default function Home() {
     localStorage.removeItem('userId')
   }
 
-  const [currentUser, setCurrentUser] = useState()
+  const [currentUser, setCurrentUser] = useState<any>()
 
-
-  
   useEffect(() => {
-    if (!user) return;
-
-  (async () => {
-  const currentUser = await useUser(user.userId)
-  setCurrentUser(currentUser.user)
-  
-  })();
-
-  },[])
-
+    if (!user) return
+    ;(async () => {
+      const currentUser = await useUser(user.userId)
+      setCurrentUser(currentUser.user)
+    })()
+  }, [])
 
   const handleSubmit = async () => {
     if (message === '') {
@@ -108,7 +102,9 @@ export default function Home() {
             <p className="text-2xl font-bold text-white pl-1">{user?.name}</p>
           </div>
           <div className="flex items-center px-4 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 rounded-full shadow-inner">
-            <span className="text-xl font-semibold text-white">経験値: {currentUser?.total_xp}</span>
+            <span className="text-xl font-semibold text-white">
+              経験値: {currentUser?.total_xp}
+            </span>
           </div>
         </div>
         <Button

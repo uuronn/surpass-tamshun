@@ -7,9 +7,7 @@ import { createContext, useState, useContext, useEffect, ReactNode } from 'react
 import { useUserContext } from './UserContext'
 import Matched from '@/components/room/Matched'
 import xpToLevel from '@/lib/xpToLevel'
-import { User } from '@/type/user'
 import isEqual from 'lodash.isequal'
-import Result from '@/app/[userId]/result/page'
 import { Button } from '@/components/ui/button'
 
 const RoomContext = createContext<{
@@ -19,8 +17,6 @@ const RoomContext = createContext<{
   prevRoom: Room | null | undefined
   createRoom: () => void
   joinRoom: (roomId: string) => void
-  win: boolean
-  setWin: (win: boolean) => void
 }>({
   currentRoom: undefined,
   setCurrentRoom: () => {},
@@ -28,8 +24,6 @@ const RoomContext = createContext<{
   prevRoom: undefined,
   createRoom: () => {},
   joinRoom: () => {},
-  win: false,
-  setWin: () => {},
 })
 
 export function useRoomContext() {
@@ -274,8 +268,6 @@ export function RoomProvider({ children }: { children: ReactNode }) {
         prevRoom,
         createRoom,
         joinRoom,
-        win,
-        setWin,
       }}
     >
       {isHost && !matched ? (
@@ -306,8 +298,6 @@ export function RoomProvider({ children }: { children: ReactNode }) {
         <Loading message="相手の承諾を待っています..." />
       ) : loading ? (
         <Loading message="対戦情報を取得しています..." />
-      ) : currentRoom?.isFinished ? (
-        <Result />
       ) : (
         children
       )}

@@ -4,27 +4,37 @@ import { useState } from 'react'
 import { Sword, Shield, Zap, Flame } from 'lucide-react'
 import { Button } from '../ui/button'
 
-type ButtonType = '攻撃' | '防御' | 'わざ'
+type ButtonType = '攻撃' | '回復' | 'わざ'
 
 type BattleButtonsProps = {
   onAttack: () => void
-  // onGuard: () => void
-  // onSpecial: () => void
+  onHeal: () => void
+  onSkill: () => void
 }
 
-export default function BattleButtons({ onAttack }: BattleButtonsProps) {
+export default function BattleButtons({ onAttack, onHeal, onSkill }: BattleButtonsProps) {
   const [selectedButton, setSelectedButton] = useState<ButtonType | null>(null)
 
   const buttons: { type: ButtonType; icon: React.ReactNode; color: string }[] = [
     { type: '攻撃', icon: <Sword className="w-16 h-12" />, color: 'from-red-400 to-red-600' },
-    { type: '防御', icon: <Shield className="w-16 h-12" />, color: 'from-blue-400 to-blue-600' },
+    { type: '回復', icon: <Shield className="w-16 h-12" />, color: 'from-blue-400 to-blue-600' },
     { type: 'わざ', icon: <Flame className="w-16 h-12" />, color: 'from-yellow-400 to-yellow-600' },
   ]
 
   const handleClick = (type: ButtonType) => {
     setSelectedButton(type)
-    if (type === '攻撃') {
-      onAttack()
+    switch (type) {
+      case '攻撃':
+        onAttack()
+        break
+      case '回復':
+        onHeal()
+        break
+      case 'わざ':
+        onSkill()
+        break
+      default:
+        break
     }
   }
 

@@ -202,15 +202,17 @@ export default function Battle() {
           setWin(false)
         }
 
-        fetch('http://localhost/api/deleteRoom', {
-          method: 'DELETE',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            room_id: currentRoom?.roomId,
-          }),
-        })
+        if (currentRoom.hostUserId == user?.userId) {
+          fetch('http://localhost/api/deleteRoom', {
+            method: 'DELETE',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              room_id: currentRoom?.roomId,
+            }),
+          })
+        }
       }
     }
   }, [currentRoom])

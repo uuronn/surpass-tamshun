@@ -30,8 +30,7 @@ export default function Home() {
     localStorage.removeItem('userId')
   }
 
-  const [currentUser, setCurrentUser] = useState<{total_xp: number}>()
-
+  const [currentUser, setCurrentUser] = useState<{ total_xp: number }>()
 
   useEffect(() => {
     if (!user) return

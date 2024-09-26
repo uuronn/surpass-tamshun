@@ -21,7 +21,8 @@ export default function Battle() {
   const [turn, setTurn] = useState<boolean>(false)
   const [log, setLog] = useState<string[]>([])
   const [processing, setProcessing] = useState<boolean>(false)
-  const [win, setWin] = useState<boolean | undefined>()
+  const [hostWin, setHostWin] = useState<boolean | undefined>()
+  const [isHost, setIsHost] = useState<boolean>(false)
 
   const { user } = useUserContext()
   const { currentRoom, setCurrentRoom, prevRoom } = useRoomContext()
@@ -187,37 +188,67 @@ export default function Battle() {
         setLogging(false)
         setTurn(currentRoom.turn === user?.userId)
         setProcessing(false)
-      }, 3000 * newLogs.length) // ログ1つにつき2秒表示
+
+        // ゲーム終了時の処理
+        if (currentRoom.joinHp !== null && currentRoom.hostHp !== null) {
+          if ((currentRoom.joinHp <= 0 || currentRoom.hostHp <= 0) && currentRoom.isConnected) {
+            setIsHost(currentRoom?.hostUserId === user?.userId)
+            if (!!currentRoom.hostHp && currentRoom.hostHp > 0) {
+              setHostWin(true)
+            } else {
+              setHostWin(false)
+            }
+            setCurrentRoom(undefined)
+
+            if (currentRoom.hostUserId == user?.userId) {
+              fetch('http://localhost/api/deleteRoom', {
+                method: 'DELETE',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  room_id: currentRoom?.roomId,
+                }),
+              })
+            }
+          }
+        }
+      }, 3000 * newLogs.length) // ログ1つにつき3秒表示
     } else {
       // 自分のターンかどうかを更新
       setTurn(currentRoom.turn === user?.userId)
-    }
 
-    // ゲーム終了時の処理
-    if (currentRoom.joinHp !== null && currentRoom.hostHp !== null) {
-      if ((currentRoom.joinHp <= 0 || currentRoom.hostHp <= 0) && currentRoom.isConnected) {
-        if (!!currentRoom.hostHp && currentRoom.hostHp > 0) {
-          setWin(true)
-        } else {
-          setWin(false)
+      // ゲーム終了時の処理（差分がない場合でもチェック）
+      if (currentRoom.joinHp !== null && currentRoom.hostHp !== null) {
+        if ((currentRoom.joinHp <= 0 || currentRoom.hostHp <= 0) && currentRoom.isConnected) {
+          if (!!currentRoom.hostHp && currentRoom.hostHp > 0) {
+            setHostWin(true)
+          } else {
+            setHostWin(false)
+          }
+
+          setCurrentRoom(undefined)
+          console.log(isHost, hostWin)
+
+          if (currentRoom.hostUserId == user?.userId) {
+            fetch('http://localhost/api/deleteRoom', {
+              method: 'DELETE',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                room_id: currentRoom?.roomId,
+              }),
+            })
+          }
         }
-
-        fetch('http://3.114.106.137/api/deleteRoom', {
-          method: 'DELETE',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            room_id: currentRoom?.roomId,
-          }),
-        })
       }
     }
   }, [currentRoom])
 
   return (
     <>
-      {win == undefined ? (
+      {hostWin == undefined ? (
         <div
           style={{
             height: '100%',
@@ -296,7 +327,15 @@ export default function Battle() {
             alignItems: 'center',
           }}
         >
-          {win ? <Victory /> : <Defeat />}
+          {isHost && hostWin ? (
+            <Victory />
+          ) : isHost && !hostWin ? (
+            <Defeat />
+          ) : !isHost && hostWin ? (
+            <Defeat />
+          ) : (
+            <Victory />
+          )}
           <Button
             onClick={() => router.push(`/${user?.userId}`)}
             type="submit"

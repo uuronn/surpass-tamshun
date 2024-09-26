@@ -54,7 +54,7 @@ export default function Battle() {
   // 攻撃ボタンのハンドラ
   const onAttack = async () => {
     setLoading(true)
-    await fetch('http://localhost/api/action', {
+    await fetch('http://3.114.106.137/api/action', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -68,7 +68,7 @@ export default function Battle() {
 
   const onHeal = async () => {
     setLoading(true)
-    await fetch('http://localhost/api/heal', {
+    await fetch('http://3.114.106.137/api/heal', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -82,7 +82,7 @@ export default function Battle() {
 
   const onSkill = async () => {
     setLoading(true)
-    await fetch('http://localhost/api/skill', {
+    await fetch('http://3.114.106.137/api/skill', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -202,7 +202,7 @@ export default function Battle() {
           setWin(false)
         }
 
-        fetch('http://localhost/api/deleteRoom', {
+        fetch('http://3.114.106.137/api/deleteRoom', {
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',

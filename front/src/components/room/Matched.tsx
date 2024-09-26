@@ -24,7 +24,7 @@ export default function Matched({ opponent }: { opponent: OpponentData }) {
   }, [])
 
   const accept = async () => {
-    await fetch('http://localhost/api/approvalJoinRoom', {
+    await fetch('http://3.114.106.137/api/approvalJoinRoom', {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -36,7 +36,7 @@ export default function Matched({ opponent }: { opponent: OpponentData }) {
   }
 
   const reject = async () => {
-    await fetch('http://localhost/api/deleteJoinUserRoom', {
+    await fetch('http://3.114.106.137/api/deleteJoinUserRoom', {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',

@@ -159,7 +159,6 @@ class RoomController extends Controller
         $room = Room::find($request->room_id);
 
         $room->delete();
-        $room->save();
 
         return response()->json(['status' => 201]);
     }

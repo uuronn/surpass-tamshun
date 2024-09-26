@@ -23,21 +23,23 @@ export default function Home() {
   const { user } = useUserContext()
   const router = useRouter()
 
-  
   useEffect(() => {
-    if (!user) return;
+    if (!user) return
 
-  (async () => {
-  const currentUser = await useUser(user.userId)
-  setCurrentUser(currentUser.user)
-  
-  })();
-
-  },[])
-
+    ;(async () => {
+      const currentUser = await useUser(user.userId)
+      setCurrentUser(currentUser.user)
+    })()
+  }, [])
 
   const editReply = (data: any): JSX.Element => {
-    setCurrentUser({hit_point: data.hitPoint, attack_power: data.attackPower, guard_power: data.guardPower, speed_power: data.speedPower, total_xp: data.totalXp})
+    setCurrentUser({
+      hit_point: data.hitPoint,
+      attack_power: data.attackPower,
+      guard_power: data.guardPower,
+      speed_power: data.speedPower,
+      total_xp: data.totalXp,
+    })
     return (
       <div>
         <p>HP: {data.hitPoint}</p>

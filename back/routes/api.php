@@ -35,6 +35,8 @@ Route::post('/action', [ActionController::class, 'attack'])->withoutMiddleware([
 
 Route::post('/heal', [ActionController::class, 'heal'])->withoutMiddleware([VerifyCsrfToken::class]);
 
+Route::post('/skill', [ActionController::class, 'skill'])->withoutMiddleware([VerifyCsrfToken::class]);
+
 Route::get('/users/{userId}', [UserController::class, 'currentUser'])->withoutMiddleware([VerifyCsrfToken::class]);
 
 Route::post('/conversation', [ConversationController::class, 'store'])->withoutMiddleware([VerifyCsrfToken::class]);

@@ -30,7 +30,7 @@ export default function Home() {
     localStorage.removeItem('userId')
   }
 
-  const [currentUser, setCurrentUser] = useState()
+  const [currentUser, setCurrentUser] = useState<{total_xp: number}>()
 
   useEffect(() => {
     if (!user) return
@@ -61,6 +61,8 @@ export default function Home() {
       setLoading(false)
     }
   }
+
+  if (!currentUser) return <div>ユーザーが存在しません</div>
 
   return (
     <div

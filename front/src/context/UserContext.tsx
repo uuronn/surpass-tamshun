@@ -8,7 +8,7 @@ import { createContext, useState, useContext, useEffect, ReactNode } from 'react
 
 const UserContext = createContext<{
   user: User | null | undefined
-  getUser:(userId: string) => Promise<User>
+  getUser: (userId: string) => Promise<User>
   setUser: React.Dispatch<React.SetStateAction<User | null | undefined>>
 }>({
   user: undefined,

@@ -12,7 +12,7 @@ import { Button } from '@/components/ui/button'
 
 const RoomContext = createContext<{
   currentRoom: Room | null | undefined
-  setCurrentRoom:(room: Room | undefined) => void
+  setCurrentRoom: (room: Room | undefined) => void
   getCurrentRoom: () => void
   prevRoom: Room | null | undefined
   createRoom: () => void

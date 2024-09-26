@@ -53,7 +53,7 @@ export default function Home() {
         <p>攻撃: {data.attackPower}</p>
         <p>回復: {data.guardPower}</p>
         <p>速さ: {data.speedPower}</p>
-        <p> レベル: {data.totalXp}</p>
+        <p> 経験値: {data.totalXp}</p>
         <p>最後のトレーニング時間: {new Date(data.lastTrainingTime).toLocaleString()}</p>
       </div>
     )

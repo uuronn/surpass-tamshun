@@ -10,11 +10,11 @@ import { useRouter } from 'next/navigation'
 import { ReactNode, useEffect, useState } from 'react'
 
 type CurrentUser = {
-  hit_point: number,
-    attack_power: number,
-    guard_power: number,
-    speed_power: number,
-    total_xp: number
+  hit_point: number
+  attack_power: number
+  guard_power: number
+  speed_power: number
+  total_xp: number
 }
 
 export default function Home() {
@@ -27,7 +27,6 @@ export default function Home() {
   const [hpValue, sethpValue] = useState<number>(0)
   const [speedValue, setSpeedValue] = useState<number>(0)
   const [currentUser, setCurrentUser] = useState<CurrentUser>()
-
 
   const { user } = useUserContext()
   const router = useRouter()
@@ -158,13 +157,12 @@ export default function Home() {
         }}
       >
         {currentUser && (
-
           <Level
-          level={currentUser.total_xp}
-          hpValue={currentUser.hit_point}
-          attackValue={currentUser.attack_power}
-          guardValue={currentUser.guard_power}
-          speedValue={currentUser.speed_power}
+            level={currentUser.total_xp}
+            hpValue={currentUser.hit_point}
+            attackValue={currentUser.attack_power}
+            guardValue={currentUser.guard_power}
+            speedValue={currentUser.speed_power}
           />
         )}
       </div>

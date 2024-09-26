@@ -30,11 +30,10 @@ export default function Home() {
     localStorage.removeItem('userId')
   }
 
-  const [currentUser, setCurrentUser] = useState()
+  const [currentUser, setCurrentUser] = useState<any>()
 
   useEffect(() => {
     if (!user) return
-
     ;(async () => {
       const currentUser = await useUser(user.userId)
       setCurrentUser(currentUser.user)

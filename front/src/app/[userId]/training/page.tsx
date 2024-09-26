@@ -28,12 +28,12 @@ export default function Home() {
   const [speedValue, setSpeedValue] = useState<number>(0)
   const [currentUser, setCurrentUser] = useState<CurrentUser>()
 
+
   const { user } = useUserContext()
   const router = useRouter()
 
   useEffect(() => {
     if (!user) return
-
     ;(async () => {
       const currentUser = await useUser(user.userId)
       setCurrentUser(currentUser.user)

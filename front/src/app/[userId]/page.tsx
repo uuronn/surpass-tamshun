@@ -32,9 +32,9 @@ export default function Home() {
 
   const [currentUser, setCurrentUser] = useState<{total_xp: number}>()
 
+
   useEffect(() => {
     if (!user) return
-
     ;(async () => {
       const currentUser = await useUser(user.userId)
       setCurrentUser(currentUser.user)

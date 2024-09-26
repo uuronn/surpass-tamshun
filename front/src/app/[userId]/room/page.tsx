@@ -12,7 +12,7 @@ export default function Room() {
   const [comment, setComment] = useState<string>('')
   const [rooms, setRooms] = useState<any[]>([])
 
-  const { user } = useUserContext()
+  const { user, getUser } = useUserContext()
   const router = useRouter()
 
   useEffect(() => {
@@ -31,8 +31,13 @@ export default function Room() {
         }
 
         const data = await res.json()
-
-        setRooms(data.roomList)
+        const roomListWithUserNames = await Promise.all(
+          data.roomList.map(async (room: any) => {
+            const userData = await getUser(room.host_user_id)
+            return { ...room, userName: userData.name }
+          }),
+        )
+        setRooms(roomListWithUserNames)
       } catch (error) {
         console.error('Error fetching room list:', error)
       }
@@ -126,21 +131,23 @@ export default function Room() {
               width: '100%',
             }}
           >
-            {rooms.map((room) => (
-              <RoomCard
-                key={room.id}
-                roomID={room.id}
-                roomName={room.host_user_id}
-                roomLevel={
-                  room.host_user_hit_point +
-                  room.host_user_attack_power +
-                  room.host_user_guard_power +
-                  room.host_user_speed_power
-                }
-                roomUrl="/battleshuzo.png"
-                roomComment={comment}
-              />
-            ))}
+            {rooms.map((room) => {
+              return (
+                <RoomCard
+                  key={room.id}
+                  roomID={room.id}
+                  roomName={room.host_user_name}
+                  roomLevel={
+                    room.host_user_hit_point +
+                    room.host_user_attack_power +
+                    room.host_user_guard_power +
+                    room.host_user_speed_power
+                  }
+                  roomUrl="/battleshuzo.png"
+                  roomComment={comment}
+                />
+              )
+            })}
           </div>
         </div>
       </div>

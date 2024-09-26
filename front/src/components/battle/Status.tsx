@@ -27,7 +27,7 @@ export default function Status({ name, attack, guard, speed, xp }: StatusProps) 
             icon={<Swords className="w-6 h-6" />}
           />
           <StatusBar
-            label="防御"
+            label="回復"
             value={guard}
             color="bg-blue-600"
             icon={<Shield className="w-6 h-6" />}

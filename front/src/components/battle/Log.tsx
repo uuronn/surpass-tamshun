@@ -27,7 +27,7 @@ export default function Log({ log }: LogProps) {
         className="h-full px-4 overflow-y-auto space-y-1 scrollbar-thin scrollbar-thumb-gray-500 scrollbar-track-transparent"
       >
         {previousLogs.map((text, index) => (
-          <div key={index} style={{ color: 'white', fontSize: '2rem' }}>
+          <div key={index} style={{ color: 'white', fontSize: '1.5rem' }}>
             {text}
           </div>
         ))}

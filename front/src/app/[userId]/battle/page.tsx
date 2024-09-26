@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef, useEffect, use } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import BattleButtons from '@/components/battle/BattleButtons'
 import Unit, { UnitRef } from '@/components/battle/Unit'
 import Log from '@/components/battle/Log'
@@ -20,7 +20,7 @@ export default function Battle() {
   const [processing, setProcessing] = useState<boolean>(false)
 
   const { user } = useUserContext()
-  const { currentRoom, prevRoom } = useRoomContext()
+  const { currentRoom, setCurrentRoom, prevRoom, setWin } = useRoomContext()
 
   const router = useRouter()
 
@@ -155,15 +155,24 @@ export default function Battle() {
         setLogging(false)
         setTurn(currentRoom.turn === user?.userId)
         setProcessing(false)
-      }, 2000 * newLogs.length) // ログ1つにつき2秒表示
+      }, 3000 * newLogs.length) // ログ1つにつき2秒表示
     } else {
       // 自分のターンかどうかを更新
       setTurn(currentRoom.turn === user?.userId)
     }
 
-    // if (currentRoom.isFinished) {
-    //   router.push(`/${user?.userId}/result`)
-    // }
+    // ゲーム終了時の処理
+    if (currentRoom.joinHp !== null && currentRoom.hostHp !== null) {
+      if ((currentRoom.joinHp <= 0 || currentRoom.hostHp <= 0) && currentRoom.isConnected) {
+        if (!!currentRoom.hostHp && currentRoom.hostHp > 0) {
+          setWin(true)
+        } else {
+          setWin(false)
+        }
+
+        router.push(`/${user?.userId}/result`)
+      }
+    }
   }, [currentRoom])
 
   return (

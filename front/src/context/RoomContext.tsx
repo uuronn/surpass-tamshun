@@ -14,16 +14,22 @@ import { Button } from '@/components/ui/button'
 
 const RoomContext = createContext<{
   currentRoom: Room | null | undefined
-  getCurrentRoom:() => void
+  setCurrentRoom:(room: Room | undefined) => void
+  getCurrentRoom: () => void
   prevRoom: Room | null | undefined
   createRoom: () => void
   joinRoom: (roomId: string) => void
+  win: boolean
+  setWin: (win: boolean) => void
 }>({
   currentRoom: undefined,
+  setCurrentRoom: () => {},
   getCurrentRoom: () => {},
   prevRoom: undefined,
   createRoom: () => {},
   joinRoom: () => {},
+  win: false,
+  setWin: () => {},
 })
 
 export function useRoomContext() {
@@ -34,6 +40,7 @@ export function RoomProvider({ children }: { children: ReactNode }) {
   const [prevRoom, setPrevRoom] = useState<Room | null | undefined>(undefined)
   const [currentRoom, setCurrentRoom] = useState<Room | null | undefined>(undefined)
   const [loading, setLoading] = useState<boolean>()
+  const [win, setWin] = useState<boolean>(false)
 
   const { user } = useUserContext()
 
@@ -259,7 +266,18 @@ export function RoomProvider({ children }: { children: ReactNode }) {
   }
 
   return (
-    <RoomContext.Provider value={{ currentRoom, getCurrentRoom, prevRoom, createRoom, joinRoom }}>
+    <RoomContext.Provider
+      value={{
+        currentRoom,
+        setCurrentRoom,
+        getCurrentRoom,
+        prevRoom,
+        createRoom,
+        joinRoom,
+        win,
+        setWin,
+      }}
+    >
       {isHost && !matched ? (
         <>
           <Button
